@@ -1,6 +1,7 @@
-module com.example.timberman {
+module timberman {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
 
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
@@ -8,4 +9,8 @@ module com.example.timberman {
 
     opens start.window to javafx.fxml;
     exports start.window;
+
+    opens options.window to javafx.fxml;
+    exports options.window;
+
 }
