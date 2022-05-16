@@ -15,9 +15,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OptionsWindowController implements Initializable{
-    static boolean checkboxValue = false;
-    static int playerValue = 1;
-    static int timeValue = 1;
+    public static boolean checkboxValue = false;
+    public static int playerValue = 1;
+    public static int timeValue = 1;
 
     @FXML
     private CheckBox musicCheckbox;
@@ -53,14 +53,8 @@ public class OptionsWindowController implements Initializable{
         playerValue = playerValueTemp;
         timeValue = timeValueTemp;
 
-        System.out.println(checkboxValue + "\n" + playerValue + "\n" + timeValue);
-
         StartWindow startWindow = new StartWindow();
         startWindow.start((Stage)((Node)event.getSource()).getScene().getWindow());
-    }
-
-    @FXML
-    public void setStaticValues(){
     }
 
     @Override

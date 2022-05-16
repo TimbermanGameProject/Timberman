@@ -1,0 +1,77 @@
+package game.window;
+
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+
+import java.util.Objects;
+
+public class PlayerPane extends GridPane {
+
+    private double width;
+    private double height;
+    private int columnNumber;
+    private int rowNumber;
+    private Label timeLabel;
+
+    public PlayerPane(Stage stage){
+        width = stage.getScene().getWidth() / GameWindow.numberOfPlayers;
+        height = stage.getScene().getHeight();
+        columnNumber = 3;
+        rowNumber = 3;
+        setPrefHeight(height);
+        setPrefWidth(width);
+        setGridLinesVisible(true); // TEMPORARILY
+
+        for (int i = 0; i < columnNumber; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(100.0 / columnNumber);
+            getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < rowNumber; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / rowNumber);
+            getRowConstraints().add(rowConst);
+        }
+        addTree();
+        addTimeLabel();
+    }
+
+    public void addTree(){
+        double treeWidth = width / 3 - 3;
+        double treeHeight = height / 3;
+        for(int i = 0;i<3;i++){
+            Rectangle tree = new Rectangle(treeWidth,treeHeight);
+            Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
+            tree.setFill(new ImagePattern(img));
+            tree.setStrokeWidth(2.5);
+            setHalignment(tree, HPos.CENTER);
+            add(tree,1,i);
+        }
+    }
+
+    public void addTimeLabel(){
+        timeLabel = new Label("0:00");
+        timeLabel.setPrefWidth(width / 3 - 50);
+        timeLabel.setPrefHeight(height / 3 - 200);
+        timeLabel.setFont(new Font("Consolas", (int)(60/GameWindow.numberOfPlayers)));
+        timeLabel.setAlignment(Pos.CENTER);
+        setHalignment(timeLabel,HPos.CENTER);
+        timeLabel.getStyleClass().add("timeLabel");
+        add(timeLabel, 1,0);
+    }
+
+}

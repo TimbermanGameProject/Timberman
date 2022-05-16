@@ -1,5 +1,6 @@
 package start.window;
 
+import game.window.GameWindow;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +42,9 @@ public class StartWindowController {
     }
 
     @FXML
-    void startButtonClicked(ActionEvent event)  {
+    void startButtonClicked(ActionEvent event) throws IOException {
+        GameWindow gameWindow = new GameWindow();
+        gameWindow.start((Stage)((Node)event.getSource()).getScene().getWindow());
     }
 
 }
