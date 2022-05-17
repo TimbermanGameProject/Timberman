@@ -51,7 +51,8 @@ public class PlayerPane extends GridPane {
     }
 
     public void addTree(){
-        double treeWidth = width / 3 - 3;
+        double treeWidth = width / 3 - 0.5;
+        System.out.println(treeWidth);
         double treeHeight = height / 3;
         for(int i = 0;i<3;i++){
             Rectangle tree = new Rectangle(treeWidth,treeHeight);

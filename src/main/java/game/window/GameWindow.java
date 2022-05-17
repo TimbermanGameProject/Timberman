@@ -2,11 +2,14 @@ package game.window;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import options.window.OptionsWindow;
 import options.window.OptionsWindowController;
+import start.window.StartWindow;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -35,11 +38,29 @@ public class GameWindow extends Application {
         return flowPane;
     }
 
+    public void handleKeys(Scene scene){
+        scene.setOnKeyPressed(e ->{
+            switch(e.getCode()){
+                case Q:
+                    StartWindow startWindow = new StartWindow();
+                    try {
+                        startWindow.start((Stage)scene.getWindow());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         String css = Objects.requireNonNull(this.getClass().getResource("/GameWindow/style.css")).toExternalForm();
         stage.getScene().getStylesheets().clear();
         stage.getScene().getStylesheets().add(css);
         stage.getScene().setRoot(createContent(stage));
+        handleKeys(stage.getScene());
     }
 }
