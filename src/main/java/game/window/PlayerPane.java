@@ -1,10 +1,9 @@
 package game.window;
 
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.control.ContentDisplay;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
@@ -12,9 +11,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.util.Objects;
@@ -48,11 +47,11 @@ public class PlayerPane extends GridPane {
         }
         addTree();
         addTimeLabel();
+        placeLumberjack(0);
     }
 
     public void addTree(){
         double treeWidth = width / 3 - 0.5;
-        System.out.println(treeWidth);
         double treeHeight = height / 3;
         for(int i = 0;i<3;i++){
             Rectangle tree = new Rectangle(treeWidth,treeHeight);
@@ -75,4 +74,20 @@ public class PlayerPane extends GridPane {
         add(timeLabel, 1,0);
     }
 
+    public void placeLumberjack(int colIndex){
+        Circle circle = new Circle(30);
+        setHalignment(circle,HPos.CENTER);
+        setValignment(circle,VPos.CENTER);
+        circle.setFill(Color.VIOLET);
+        add(circle,colIndex,2);
+    }
+
+    public void removeLumberjack(){
+        for(Node node : getChildren()) {
+            if(node instanceof Circle) {
+                getChildren().remove(node);
+                break;
+            }
+        }
+    }
 }

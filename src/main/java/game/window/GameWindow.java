@@ -1,25 +1,25 @@
 package game.window;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import options.window.OptionsWindow;
 import options.window.OptionsWindowController;
 import start.window.StartWindow;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class GameWindow extends Application {
 
     public static int numberOfPlayers;
+    private ArrayList<PlayerPane> players;
 
     public GameWindow(){
         numberOfPlayers = OptionsWindowController.playerValue;
+        players = new ArrayList<>();
     }
 
     public Parent createContent(Stage stage){
@@ -33,6 +33,7 @@ public class GameWindow extends Application {
         for(int i = 0;i<numberOfPlayers;i++){
             PlayerPane playerPane = new PlayerPane(stage);
             playerPane.getStyleClass().add("PlayerPane"); //FOR CSS STYLING
+            players.add(playerPane);
             flowPane.getChildren().add(playerPane);
         }
         return flowPane;
@@ -47,6 +48,38 @@ public class GameWindow extends Application {
                         startWindow.start((Stage)scene.getWindow());
                     } catch (IOException ex) {
                         ex.printStackTrace();
+                    }
+                    break;
+                case A:
+                    players.get(0).removeLumberjack();
+                    players.get(0).placeLumberjack(0);
+                    break;
+                case D:
+                    players.get(0).removeLumberjack();
+                    players.get(0).placeLumberjack(2);
+                    break;
+                case J:
+                    if(numberOfPlayers >= 2) {
+                        players.get(1).removeLumberjack();
+                        players.get(1).placeLumberjack(0);
+                    }
+                    break;
+                case L:
+                    if(numberOfPlayers >= 2) {
+                        players.get(1).removeLumberjack();
+                        players.get(1).placeLumberjack(2);
+                    }
+                    break;
+                case NUMPAD4:
+                    if(numberOfPlayers == 3) {
+                        players.get(2).removeLumberjack();
+                        players.get(2).placeLumberjack(0);
+                    }
+                    break;
+                case NUMPAD6:
+                    if(numberOfPlayers == 3) {
+                        players.get(2).removeLumberjack();
+                        players.get(2).placeLumberjack(2);
                     }
                     break;
                 default:
