@@ -1,25 +1,54 @@
 package game.window;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import options.window.OptionsWindow;
 import options.window.OptionsWindowController;
 import start.window.StartWindow;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameWindow extends Application {
 
     public static int numberOfPlayers;
     private ArrayList<PlayerPane> players;
+    int startTime = OptionsWindowController.timeValue*60;
+    int delay = 1000;
 
     public GameWindow(){
         numberOfPlayers = OptionsWindowController.playerValue;
         players = new ArrayList<>();
+    }
+
+    public void post() {
+        if (startTime < 0)
+            return; // todo stop the game now
+
+        for (PlayerPane player : players) {
+            player.changeTime(startTime);
+        }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                System.out.println(startTime);
+                startTime--;
+                post();
+                timer.cancel();
+            }
+        }, delay);
+
     }
 
     public Parent createContent(Stage stage){
@@ -36,7 +65,27 @@ public class GameWindow extends Application {
             players.add(playerPane);
             flowPane.getChildren().add(playerPane);
         }
+
+        //post();
+        timerInterval();
+
         return flowPane;
+    }
+
+    private void timerInterval() {
+        Timeline sss = new Timeline(
+                new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        startTime--;
+                        for (PlayerPane player : players) {
+                            player.changeTime(startTime);
+                        }
+                    }
+                })
+        );
+        sss.setCycleCount(startTime);
+        sss.play();
     }
 
     public void handleKeys(Scene scene){
@@ -45,6 +94,7 @@ public class GameWindow extends Application {
                 case Q:
                     StartWindow startWindow = new StartWindow();
                     try {
+                        startTime = 0;
                         startWindow.start((Stage)scene.getWindow());
                     } catch (IOException ex) {
                         ex.printStackTrace();
