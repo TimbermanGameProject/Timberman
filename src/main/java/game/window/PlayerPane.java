@@ -31,7 +31,9 @@ public class PlayerPane extends GridPane {
     private double height;
     private int columnNumber;
     private int rowNumber;
+    private int points;
     private Label timeLabel;
+    private Label pointsLabel;
 
     public PlayerPane(Stage stage) {
         width = stage.getScene().getWidth() / GameWindow.numberOfPlayers;
@@ -55,6 +57,7 @@ public class PlayerPane extends GridPane {
         }
         addTree();
         addTimeLabel();
+        addPointsLabel();
         placeLumberjack(0);
     }
 
@@ -88,16 +91,27 @@ public class PlayerPane extends GridPane {
         timeLabel = new Label(output);
         timeLabel.setPrefWidth(width / 3 - 50);
         timeLabel.setPrefHeight(height / 3 - 200);
-        timeLabel.setFont(new Font("Consolas", (int) (60 / GameWindow.numberOfPlayers)));
+        timeLabel.setFont(new Font("Consolas", (int)(100/GameWindow.numberOfPlayers)));
         timeLabel.setAlignment(Pos.CENTER);
-        setHalignment(timeLabel, HPos.CENTER);
+        setHalignment(timeLabel,HPos.CENTER);
+        setValignment(timeLabel,VPos.CENTER);
         timeLabel.getStyleClass().add("timeLabel");
         add(timeLabel, 1, 0);
-
-
     }
 
-    public void placeLumberjack(int colIndex) {
+    public void addPointsLabel(){
+        pointsLabel = new Label(Integer.toString(points));
+        pointsLabel.setPrefWidth(width / 4 - 50);
+        pointsLabel.setPrefHeight(height / 5 - 200);
+        pointsLabel.setFont(new Font("Consolas", (int)(75/GameWindow.numberOfPlayers)));
+        pointsLabel.setAlignment(Pos.CENTER);
+        setHalignment(pointsLabel,HPos.CENTER);
+        setValignment(pointsLabel,VPos.BOTTOM);
+        pointsLabel.getStyleClass().add("pointsLabel");
+        add(pointsLabel,  1,0);
+    }
+
+    public void placeLumberjack(int colIndex){
         Circle circle = new Circle(30);
         setHalignment(circle, HPos.CENTER);
         setValignment(circle, VPos.CENTER);
