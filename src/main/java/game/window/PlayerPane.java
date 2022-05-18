@@ -1,10 +1,12 @@
 package game.window;
 
+
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -15,8 +17,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import options.window.OptionsWindowController;
 
+
+import java.time.LocalTime;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PlayerPane extends GridPane {
 
@@ -28,7 +35,7 @@ public class PlayerPane extends GridPane {
     private Label timeLabel;
     private Label pointsLabel;
 
-    public PlayerPane(Stage stage){
+    public PlayerPane(Stage stage) {
         width = stage.getScene().getWidth() / GameWindow.numberOfPlayers;
         height = stage.getScene().getHeight();
         columnNumber = 3;
@@ -36,6 +43,7 @@ public class PlayerPane extends GridPane {
         setPrefHeight(height);
         setPrefWidth(width);
         setGridLinesVisible(true); // TEMPORARILY
+
 
         for (int i = 0; i < columnNumber; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
@@ -53,21 +61,34 @@ public class PlayerPane extends GridPane {
         placeLumberjack(0);
     }
 
-    public void addTree(){
+    public void changeTime(int time){
+        int minutes = time/60;
+        int seconds = (time - (time / 60) * 60);
+        String output = String.format("%d:%02d", minutes, seconds);
+        timeLabel.setText(output);
+
+        System.out.println(output);
+    }
+
+    public void addTree() {
         double treeWidth = width / 3 - 0.5;
         double treeHeight = height / 3;
-        for(int i = 0;i<3;i++){
-            Rectangle tree = new Rectangle(treeWidth,treeHeight);
+        for (int i = 0; i < 3; i++) {
+            Rectangle tree = new Rectangle(treeWidth, treeHeight);
             Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
             tree.setFill(new ImagePattern(img));
             tree.setStrokeWidth(2.5);
             setHalignment(tree, HPos.CENTER);
-            add(tree,1,i);
+            add(tree, 1, i);
         }
     }
 
-    public void addTimeLabel(){
-        timeLabel = new Label("0:00");
+    public void addTimeLabel() {
+        int minutes = OptionsWindowController.timeValue;
+        int seconds = 0;
+        String output = String.format("%d:%02d", minutes, seconds);
+
+        timeLabel = new Label(output);
         timeLabel.setPrefWidth(width / 3 - 50);
         timeLabel.setPrefHeight(height / 3 - 200);
         timeLabel.setFont(new Font("Consolas", (int)(100/GameWindow.numberOfPlayers)));
@@ -75,7 +96,7 @@ public class PlayerPane extends GridPane {
         setHalignment(timeLabel,HPos.CENTER);
         setValignment(timeLabel,VPos.CENTER);
         timeLabel.getStyleClass().add("timeLabel");
-        add(timeLabel, 1,0);
+        add(timeLabel, 1, 0);
     }
 
     public void addPointsLabel(){
@@ -92,15 +113,15 @@ public class PlayerPane extends GridPane {
 
     public void placeLumberjack(int colIndex){
         Circle circle = new Circle(30);
-        setHalignment(circle,HPos.CENTER);
-        setValignment(circle,VPos.CENTER);
+        setHalignment(circle, HPos.CENTER);
+        setValignment(circle, VPos.CENTER);
         circle.setFill(Color.VIOLET);
-        add(circle,colIndex,2);
+        add(circle, colIndex, 2);
     }
 
-    public void removeLumberjack(){
-        for(Node node : getChildren()) {
-            if(node instanceof Circle) {
+    public void removeLumberjack() {
+        for (Node node : getChildren()) {
+            if (node instanceof Circle) {
                 getChildren().remove(node);
                 break;
             }
