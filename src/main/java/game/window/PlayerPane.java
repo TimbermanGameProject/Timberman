@@ -66,8 +66,6 @@ public class PlayerPane extends GridPane {
         int seconds = (time - (time / 60) * 60);
         String output = String.format("%d:%02d", minutes, seconds);
         timeLabel.setText(output);
-
-        System.out.println(output);
     }
 
     public void addTree() {
@@ -94,19 +92,24 @@ public class PlayerPane extends GridPane {
         timeLabel.setFont(new Font("Consolas", (int)(100/GameWindow.numberOfPlayers)));
         timeLabel.setAlignment(Pos.CENTER);
         setHalignment(timeLabel,HPos.CENTER);
-        setValignment(timeLabel,VPos.CENTER);
+        setValignment(timeLabel,VPos.TOP);
         timeLabel.getStyleClass().add("timeLabel");
         add(timeLabel, 1, 0);
     }
 
     public void addPointsLabel(){
         pointsLabel = new Label(Integer.toString(points));
-        pointsLabel.setPrefWidth(width / 4 - 50);
+        pointsLabel.setPrefWidth(width / 4 - 30);
         pointsLabel.setPrefHeight(height / 5 - 200);
         pointsLabel.setFont(new Font("Consolas", (int)(75/GameWindow.numberOfPlayers)));
         pointsLabel.setAlignment(Pos.CENTER);
         setHalignment(pointsLabel,HPos.CENTER);
-        setValignment(pointsLabel,VPos.BOTTOM);
+        if(GameWindow.numberOfPlayers == 1) {
+            setValignment(pointsLabel,VPos.BOTTOM);
+        }
+        else{
+            setValignment(pointsLabel,VPos.CENTER);
+        }
         pointsLabel.getStyleClass().add("pointsLabel");
         add(pointsLabel,  1,0);
     }
