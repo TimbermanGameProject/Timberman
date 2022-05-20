@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -20,10 +19,8 @@ import javafx.stage.Stage;
 import options.window.OptionsWindowController;
 
 
-import java.time.LocalTime;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class PlayerPane extends GridPane {
 
@@ -32,17 +29,30 @@ public class PlayerPane extends GridPane {
     private int columnNumber;
     private int rowNumber;
     private int points;
+
+    private Stage stage;
+
     private Label timeLabel;
     private Label pointsLabel;
+
+    private Circle lumberjack;
 
     public PlayerPane(Stage stage) {
         width = stage.getScene().getWidth() / GameWindow.numberOfPlayers;
         height = stage.getScene().getHeight();
         columnNumber = 3;
         rowNumber = 3;
+        this.stage = stage;
+
         setPrefHeight(height);
         setPrefWidth(width);
         setGridLinesVisible(true); // TEMPORARILY
+
+        //LUMBERJACK INIT
+        lumberjack = new Circle(30);
+        setHalignment(lumberjack, HPos.CENTER);
+        setValignment(lumberjack, VPos.CENTER);
+        lumberjack.setFill(Color.VIOLET);
 
 
         for (int i = 0; i < columnNumber; i++) {
@@ -115,11 +125,7 @@ public class PlayerPane extends GridPane {
     }
 
     public void placeLumberjack(int colIndex){
-        Circle circle = new Circle(30);
-        setHalignment(circle, HPos.CENTER);
-        setValignment(circle, VPos.CENTER);
-        circle.setFill(Color.VIOLET);
-        add(circle, colIndex, 2);
+        add(lumberjack, colIndex, 2);
     }
 
     public void removeLumberjack() {
@@ -129,5 +135,68 @@ public class PlayerPane extends GridPane {
                 break;
             }
         }
+    }
+
+    //BRANCH HAS 50% TO BE ADDED AND THEN 50% TO SPAWN ON EITHER SIDE
+    public void addBranch(){
+        //DO NOT ADD BRANCH
+        if(Math.floor(Math.random() * 2) % 2 == 1){
+            return;
+        }
+        Branch branch = new Branch(stage);
+        int branchColumn = Math.floor(Math.random() * 2) % 2 == 1 ? 0 : 2;
+        setValignment(branch, VPos.CENTER);
+        setHalignment(branch, branchColumn == 0 ? HPos.RIGHT : HPos.LEFT);
+        add(branch, branchColumn, 0);
+    }
+
+    public void checkForCollision(){
+        Branch branch = null;
+        for(Node node : getChildren()){
+            if(node instanceof Branch && getRowIndex(node) == 2){
+                branch = (Branch)node;
+            }
+        }
+        if(branch != null && Objects.equals(getColumnIndex(branch), getColumnIndex(lumberjack))){
+            lumberjack.setFill(Color.RED);
+            getChildren().remove(branch);
+            updatePoints(-1);
+        }
+        else {
+            updatePoints(1);
+        }
+    }
+
+    //TODO: Method uses long algorithm, maybe can be changed to be faster
+    public void lowerBranches(){
+        Branch[] branches = new Branch[6];
+        int[] columns = new int[6];
+        int[] rows = new int[6];
+        int i = 0;
+        //FIND ALL BRANCHES (CAN'T UPDATE CORDS RIGHT AWAY AS IT THROWS AN ERROR)
+        for(Node node : getChildren()){
+            if(node instanceof Branch){
+                branches[i] = (Branch)node;
+                columns[i] = getColumnIndex(node);
+                rows[i] = getRowIndex(node);
+                i++;
+            }
+        }
+        //REMOVE ALL BRANCHES
+        getChildren().removeAll(branches);
+        //ADD NEW BRANCHES WITH UPDATED CORDS
+        for(int j = 0;j<i;j++){
+            if(rows[j] < 2){
+                Branch branch = new Branch(stage);
+                setValignment(branch, VPos.CENTER);
+                setHalignment(branch, columns[j] == 0 ? HPos.RIGHT : HPos.LEFT);
+                add(branch, columns[j], rows[j] + 1);
+            }
+        }
+    }
+
+    public void updatePoints(int toAdd){
+        points += toAdd;
+        pointsLabel.setText(Integer.toString(points));
     }
 }

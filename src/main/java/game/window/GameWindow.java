@@ -24,8 +24,8 @@ public class GameWindow extends Application {
 
     public static int numberOfPlayers;
     private ArrayList<PlayerPane> players;
-    int startTime = OptionsWindowController.timeValue*60;
-    int delay = 1000;
+    private int startTime = OptionsWindowController.timeValue * 60;
+    private int delay = 1000;
 
     public GameWindow(){
         numberOfPlayers = OptionsWindowController.playerValue;
@@ -103,33 +103,51 @@ public class GameWindow extends Application {
                 case A:
                     players.get(0).removeLumberjack();
                     players.get(0).placeLumberjack(0);
+                    players.get(0).lowerBranches();
+                    players.get(0).checkForCollision();
+                    players.get(0).addBranch();
                     break;
                 case D:
                     players.get(0).removeLumberjack();
                     players.get(0).placeLumberjack(2);
+                    players.get(0).lowerBranches();
+                    players.get(0).checkForCollision();
+                    players.get(0).addBranch();
                     break;
                 case J:
                     if(numberOfPlayers >= 2) {
                         players.get(1).removeLumberjack();
                         players.get(1).placeLumberjack(0);
+                        players.get(1).lowerBranches();
+                        players.get(1).checkForCollision();
+                        players.get(1).addBranch();
                     }
                     break;
                 case L:
                     if(numberOfPlayers >= 2) {
                         players.get(1).removeLumberjack();
                         players.get(1).placeLumberjack(2);
+                        players.get(1).lowerBranches();
+                        players.get(1).checkForCollision();
+                        players.get(1).addBranch();
                     }
                     break;
                 case NUMPAD4:
                     if(numberOfPlayers == 3) {
                         players.get(2).removeLumberjack();
                         players.get(2).placeLumberjack(0);
+                        players.get(2).lowerBranches();
+                        players.get(2).checkForCollision();
+                        players.get(2).addBranch();
                     }
                     break;
                 case NUMPAD6:
                     if(numberOfPlayers == 3) {
                         players.get(2).removeLumberjack();
                         players.get(2).placeLumberjack(2);
+                        players.get(2).lowerBranches();
+                        players.get(2).checkForCollision();
+                        players.get(2).addBranch();
                     }
                     break;
                 default:
