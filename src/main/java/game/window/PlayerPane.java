@@ -1,7 +1,9 @@
 package game.window;
 
 
+import javafx.animation.FadeTransition;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -15,7 +17,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import options.window.OptionsWindowController;
 
 
@@ -35,6 +39,7 @@ public class PlayerPane extends GridPane {
     private Label timeLabel;
     private Label pointsLabel;
 
+    //TODO: find some png of lumberjack
     private Circle lumberjack;
 
     public PlayerPane(Stage stage) {
@@ -114,12 +119,7 @@ public class PlayerPane extends GridPane {
         pointsLabel.setFont(new Font("Consolas", (int)(75/GameWindow.numberOfPlayers)));
         pointsLabel.setAlignment(Pos.CENTER);
         setHalignment(pointsLabel,HPos.CENTER);
-        if(GameWindow.numberOfPlayers == 1) {
-            setValignment(pointsLabel,VPos.BOTTOM);
-        }
-        else{
-            setValignment(pointsLabel,VPos.CENTER);
-        }
+        setValignment(pointsLabel,VPos.BOTTOM);
         pointsLabel.getStyleClass().add("pointsLabel");
         add(pointsLabel,  1,0);
     }
@@ -150,6 +150,7 @@ public class PlayerPane extends GridPane {
         add(branch, branchColumn, 0);
     }
 
+    //TODO: make some animation when lumberjack hits branch
     public void checkForCollision(){
         Branch branch = null;
         for(Node node : getChildren()){
@@ -157,11 +158,14 @@ public class PlayerPane extends GridPane {
                 branch = (Branch)node;
             }
         }
+        //COLLISION
         if(branch != null && Objects.equals(getColumnIndex(branch), getColumnIndex(lumberjack))){
             lumberjack.setFill(Color.RED);
             getChildren().remove(branch);
+            addNegativePointAnimation();
             updatePoints(-1);
         }
+        //NO COLLISION
         else {
             updatePoints(1);
         }
@@ -198,5 +202,27 @@ public class PlayerPane extends GridPane {
     public void updatePoints(int toAdd){
         points += toAdd;
         pointsLabel.setText(Integer.toString(points));
+    }
+
+    public void addNegativePointAnimation(){
+        Text text = new Text("-1");
+        setValignment(text, VPos.TOP);
+        setHalignment(text, HPos.CENTER);
+        text.setFont(new Font("Consolas", (int)(75/GameWindow.numberOfPlayers)));
+        text.setFill(Color.valueOf("#FF4E4E"));
+        text.setStroke(Color.BLACK);
+        text.setStrokeWidth(1.5);
+        setMargin(text, new Insets(15,0,0,0));
+        text.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 10, 0.5, 0.0, 0.0);");
+        add(text, 1,1);
+
+        //Animation
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setNode(text);
+        fadeTransition.setDuration(Duration.millis(1500));
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.setOnFinished(e -> getChildren().remove(text));
+        fadeTransition.play();
     }
 }
