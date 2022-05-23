@@ -15,6 +15,6 @@ public class StartWindow extends Application {
         String css = Objects.requireNonNull(this.getClass().getResource("/StartWindow/style.css")).toExternalForm();
         stage.getScene().getStylesheets().clear();
         stage.getScene().getStylesheets().add(css);
-        stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(OptionsWindow.class.getResource("/StartWindow/startWindow.fxml"))));
+        stage.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(StartWindow.class.getResource("/StartWindow/startWindow.fxml"))));
     }
 }
