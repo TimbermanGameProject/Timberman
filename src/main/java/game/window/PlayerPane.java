@@ -225,4 +225,8 @@ public class PlayerPane extends GridPane {
         fadeTransition.setOnFinished(e -> getChildren().remove(text));
         fadeTransition.play();
     }
+
+    public int getPoints() {
+        return points;
+    }
 }
