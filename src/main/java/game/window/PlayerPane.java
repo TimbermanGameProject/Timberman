@@ -28,6 +28,7 @@ import java.util.Objects;
 
 public class PlayerPane extends GridPane {
 
+    private static final int PENALTY_POINTS = -10;
     private double width;
     private double height;
     private int columnNumber;
@@ -163,7 +164,7 @@ public class PlayerPane extends GridPane {
             lumberjack.setFill(Color.RED);
             getChildren().remove(branch);
             addNegativePointAnimation();
-            updatePoints(-1);
+            updatePoints(PENALTY_POINTS);
         }
         //NO COLLISION
         else {
@@ -201,11 +202,13 @@ public class PlayerPane extends GridPane {
 
     public void updatePoints(int toAdd){
         points += toAdd;
+        if(points < 0 )
+            points = 0;
         pointsLabel.setText(Integer.toString(points));
     }
 
     public void addNegativePointAnimation(){
-        Text text = new Text("-1");
+        Text text = new Text(Integer.toString(PENALTY_POINTS));
         setValignment(text, VPos.TOP);
         setHalignment(text, HPos.CENTER);
         text.setFont(new Font("Consolas", (int)(75/GameWindow.numberOfPlayers)));
