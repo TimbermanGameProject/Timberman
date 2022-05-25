@@ -85,7 +85,7 @@ public class GameWindow extends Application {
     }
 
     public void handleKeys(Scene scene){
-        scene.setOnKeyPressed(e ->{
+        scene.setOnKeyReleased(e ->{
             switch(e.getCode()){
                 case Q:
                     timer.stop();
