@@ -1,7 +1,7 @@
 package game.window;
 
 
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,6 +28,7 @@ import java.util.Objects;
 
 public class PlayerPane extends GridPane {
 
+    private static final int PENALTY_POINTS = -10;
     private double width;
     private double height;
     private int columnNumber;
@@ -163,11 +164,13 @@ public class PlayerPane extends GridPane {
             lumberjack.setFill(Color.RED);
             getChildren().remove(branch);
             addNegativePointAnimation();
-            updatePoints(-1);
+            updatePoints(PENALTY_POINTS);
+            chopDownTreeAnimation();
         }
         //NO COLLISION
         else {
             updatePoints(1);
+            chopDownTreeAnimation();
         }
     }
 
@@ -201,11 +204,13 @@ public class PlayerPane extends GridPane {
 
     public void updatePoints(int toAdd){
         points += toAdd;
+        if(points < 0 )
+            points = 0;
         pointsLabel.setText(Integer.toString(points));
     }
 
     public void addNegativePointAnimation(){
-        Text text = new Text("-1");
+        Text text = new Text(Integer.toString(PENALTY_POINTS));
         setValignment(text, VPos.TOP);
         setHalignment(text, HPos.CENTER);
         text.setFont(new Font("Consolas", (int)(75/GameWindow.numberOfPlayers)));
@@ -228,5 +233,42 @@ public class PlayerPane extends GridPane {
 
     public int getPoints() {
         return points;
+    }
+
+    public void chopDownTreeAnimation(){
+        double treeWidth = width / 3 - 0.5;
+        double treeHeight = height / 3;
+        Rectangle tree = new Rectangle(treeWidth, treeHeight);
+        Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
+        tree.setFill(new ImagePattern(img));
+        tree.setStrokeWidth(2.5);
+        setHalignment(tree, HPos.CENTER);
+        add(tree, 1,2);
+
+        //All animations
+        ParallelTransition pt = new ParallelTransition();
+        pt.setOnFinished(e -> getChildren().remove(tree));
+
+        //Animation rotate
+        RotateTransition rotate = new RotateTransition(Duration.millis(250));
+        rotate.setNode(tree);
+        rotate.setByAngle(360);
+        pt.getChildren().add(rotate);
+
+        //Animation translate
+        TranslateTransition translate = new TranslateTransition(Duration.millis(250));
+        translate.setNode(tree);
+        int colIndex = getColumnIndex(lumberjack);
+        translate.setByX(colIndex == 0 ? treeWidth : -treeWidth);
+        translate.setByY(treeHeight);
+        pt.getChildren().add(translate);
+
+        //Animation scale
+        ScaleTransition scale = new ScaleTransition(Duration.millis(50));
+        scale.setNode(tree);
+        scale.setByX(-2);
+        scale.setByY(-2);
+        pt.getChildren().add(scale);
+        pt.play();
     }
 }
