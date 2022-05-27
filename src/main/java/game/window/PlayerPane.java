@@ -259,12 +259,7 @@ public class PlayerPane extends GridPane {
         TranslateTransition translate = new TranslateTransition(Duration.millis(250));
         translate.setNode(tree);
         int colIndex = getColumnIndex(lumberjack);
-        if (colIndex == 0) {
-            translate.setByX(treeWidth);
-        }
-        else{
-            translate.setByX(-treeWidth);
-        }
+        translate.setByX(colIndex == 0 ? treeWidth : -treeWidth);
         translate.setByY(treeHeight);
         pt.getChildren().add(translate);
 
