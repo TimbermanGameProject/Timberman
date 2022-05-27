@@ -264,10 +264,12 @@ public class PlayerPane extends GridPane {
         pt.getChildren().add(translate);
 
         //Animation scale
-        ScaleTransition scale = new ScaleTransition(Duration.millis(50));
+        ScaleTransition scale = new ScaleTransition(Duration.millis(100));
         scale.setNode(tree);
-        scale.setByX(-2);
-        scale.setByY(-2);
+        scale.setFromX(1);
+        scale.setFromY(1);
+        scale.setToX(0.7);
+        scale.setToY(0.7);
         pt.getChildren().add(scale);
         pt.play();
     }
