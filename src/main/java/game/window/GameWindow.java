@@ -46,7 +46,7 @@ public class GameWindow extends Application {
 
         //ADDING PLAYER PANES HERE
         for(int i = 0;i<numberOfPlayers;i++){
-            PlayerPane playerPane = new PlayerPane(stage);
+            PlayerPane playerPane = new PlayerPane(stage, i);
             playerPane.getStyleClass().add("PlayerPane"); //FOR CSS STYLING
             players.add(playerPane);
             flowPane.getChildren().add(playerPane);
