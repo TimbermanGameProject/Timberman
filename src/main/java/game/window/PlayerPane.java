@@ -46,7 +46,6 @@ public class PlayerPane extends GridPane {
     private Label timeLabel;
     private Label pointsLabel;
 
-    //TODO: find some png of lumberjack
     private ImageView lumberjack;
 
     public PlayerPane(Stage stage, int id) {
