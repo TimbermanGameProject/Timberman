@@ -45,7 +45,6 @@ public class GameWindow extends Application {
         flowPane.setPrefWidth(stage.getScene().getHeight());
 
         //ADDING PLAYER PANES HERE
-        //todo back here
         for(int i = 0;i<numberOfPlayers;i++){
             PlayerPane playerPane = new PlayerPane(stage, i);
             playerPane.getStyleClass().add("PlayerPane"); //FOR CSS STYLING
