@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -31,8 +33,6 @@ import java.util.Objects;
 public class PlayerPane extends GridPane {
     public static final int[] charactersID = {0, 1, 2};
     private static final int PENALTY_POINTS = -10;
-    private static final int LEFT_SITE = 0;
-    private static final int RIGHT_SITE = 2;
     private int currentSite = 0;
 
     private double width;
@@ -45,6 +45,9 @@ public class PlayerPane extends GridPane {
 
     private Label timeLabel;
     private Label pointsLabel;
+
+    private MediaPlayer choppingSound;
+    private MediaPlayer ouchSound;
 
     private ImageView lumberjack;
 
@@ -63,6 +66,12 @@ public class PlayerPane extends GridPane {
         String imgPath = "/GameWindow/characters/character_" + id + ".png";
         Image img = new Image(Objects.requireNonNull(getClass().getResource(imgPath)).toExternalForm());
         lumberjack = new ImageView(img);
+
+        //CHOPPING SOUND INIT
+        initChoppingSound();
+
+        //OUCH SOUND INIT
+        initOuchSound();
 
         setHalignment(lumberjack, HPos.CENTER);
         setValignment(lumberjack, VPos.CENTER);
@@ -145,10 +154,6 @@ public class PlayerPane extends GridPane {
             Rotate flipRotation = new Rotate(flipAnkle, Rotate.Y_AXIS);
             lumberjack.getTransforms().addAll(flipRotation, flipTranslation);
         }
-
-
-
-
     }
 
     public void removeLumberjack() {
@@ -188,11 +193,15 @@ public class PlayerPane extends GridPane {
             addNegativePointAnimation();
             updatePoints(PENALTY_POINTS);
             chopDownTreeAnimation();
+            ouchSound.seek(choppingSound.getStartTime());
+            ouchSound.play();
         }
         //NO COLLISION
         else {
             updatePoints(1);
             chopDownTreeAnimation();
+            choppingSound.seek(choppingSound.getStartTime());
+            choppingSound.play();
         }
     }
 
@@ -293,6 +302,18 @@ public class PlayerPane extends GridPane {
         scale.setToX(0.7);
         scale.setToY(0.7);
         pt.getChildren().add(scale);
+
+        //Play all animations
         pt.play();
+    }
+
+    public void initChoppingSound(){
+        choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/chop_chop.mp3").toExternalForm()));
+        choppingSound.setVolume(0.6);
+    }
+
+    public void initOuchSound(){
+        ouchSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/ouch.mp3").toExternalForm()));
+        ouchSound.setVolume(0.6);
     }
 }
