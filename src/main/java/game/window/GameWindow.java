@@ -72,6 +72,7 @@ public class GameWindow extends Application {
                             for(int i = 0;i<numberOfPlayers;i++){
                                 playerPoints[i] = players.get(i).getPoints();
                             }
+                            stage.getScene().setOnKeyReleased(null);
                             ResultWindow resultWindow = new ResultWindow(numberOfPlayers);
                             try {
                                 resultWindow.start(stage);
@@ -86,76 +87,75 @@ public class GameWindow extends Application {
         timer.play();
     }
 
-    public void handleKeys(Scene scene){
-        scene.setOnKeyReleased(e ->{
-            if(startTime > 0) {
-                switch (e.getCode()) {
-                    case Q:
-                        timer.stop();
-                        for (int i = 0; i < numberOfPlayers; i++) {
-                            playerPoints[i] = players.get(i).getPoints();
-                        }
-                        ResultWindow resultWindow = new ResultWindow(numberOfPlayers);
-                        try {
-                            startTime = 0;
-                            resultWindow.start((Stage) scene.getWindow());
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                        break;
-                    case A:
-                        players.get(0).removeLumberjack();
-                        players.get(0).placeLumberjack(0);
-                        players.get(0).lowerBranches();
-                        players.get(0).checkForCollision();
-                        players.get(0).addBranch();
-                        break;
-                    case D:
-                        players.get(0).removeLumberjack();
-                        players.get(0).placeLumberjack(2);
-                        players.get(0).lowerBranches();
-                        players.get(0).checkForCollision();
-                        players.get(0).addBranch();
-                        break;
-                    case J:
-                        if (numberOfPlayers >= 2) {
-                            players.get(1).removeLumberjack();
-                            players.get(1).placeLumberjack(0);
-                            players.get(1).lowerBranches();
-                            players.get(1).checkForCollision();
-                            players.get(1).addBranch();
-                        }
-                        break;
-                    case L:
-                        if (numberOfPlayers >= 2) {
-                            players.get(1).removeLumberjack();
-                            players.get(1).placeLumberjack(2);
-                            players.get(1).lowerBranches();
-                            players.get(1).checkForCollision();
-                            players.get(1).addBranch();
-                        }
-                        break;
-                    case NUMPAD4:
-                        if (numberOfPlayers == 3) {
-                            players.get(2).removeLumberjack();
-                            players.get(2).placeLumberjack(0);
-                            players.get(2).lowerBranches();
-                            players.get(2).checkForCollision();
-                            players.get(2).addBranch();
-                        }
-                        break;
-                    case NUMPAD6:
-                        if (numberOfPlayers == 3) {
-                            players.get(2).removeLumberjack();
-                            players.get(2).placeLumberjack(2);
-                            players.get(2).lowerBranches();
-                            players.get(2).checkForCollision();
-                            players.get(2).addBranch();
-                        }
-                        break;
-                    default:
-                        break;
-                }
+    public void handleKeys(Scene scene) {
+        scene.setOnKeyReleased(e -> {
+            switch (e.getCode()) {
+                case Q:
+                    timer.stop();
+                    for (int i = 0; i < numberOfPlayers; i++) {
+                        playerPoints[i] = players.get(i).getPoints();
+                    }
+                    scene.setOnKeyReleased(null);
+                    ResultWindow resultWindow = new ResultWindow(numberOfPlayers);
+                    try {
+                        startTime = 0;
+                        resultWindow.start((Stage) scene.getWindow());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+                case A:
+                    players.get(0).removeLumberjack();
+                    players.get(0).placeLumberjack(0);
+                    players.get(0).lowerBranches();
+                    players.get(0).checkForCollision();
+                    players.get(0).addBranch();
+                    break;
+                case D:
+                    players.get(0).removeLumberjack();
+                    players.get(0).placeLumberjack(2);
+                    players.get(0).lowerBranches();
+                    players.get(0).checkForCollision();
+                    players.get(0).addBranch();
+                    break;
+                case J:
+                    if (numberOfPlayers >= 2) {
+                        players.get(1).removeLumberjack();
+                        players.get(1).placeLumberjack(0);
+                        players.get(1).lowerBranches();
+                        players.get(1).checkForCollision();
+                        players.get(1).addBranch();
+                    }
+                    break;
+                case L:
+                    if (numberOfPlayers >= 2) {
+                        players.get(1).removeLumberjack();
+                        players.get(1).placeLumberjack(2);
+                        players.get(1).lowerBranches();
+                        players.get(1).checkForCollision();
+                        players.get(1).addBranch();
+                    }
+                    break;
+                case NUMPAD4:
+                    if (numberOfPlayers == 3) {
+                        players.get(2).removeLumberjack();
+                        players.get(2).placeLumberjack(0);
+                        players.get(2).lowerBranches();
+                        players.get(2).checkForCollision();
+                        players.get(2).addBranch();
+                    }
+                    break;
+                case NUMPAD6:
+                    if (numberOfPlayers == 3) {
+                        players.get(2).removeLumberjack();
+                        players.get(2).placeLumberjack(2);
+                        players.get(2).lowerBranches();
+                        players.get(2).checkForCollision();
+                        players.get(2).addBranch();
+                    }
+                    break;
+                default:
+                    break;
             }
         });
     }
