@@ -11,9 +11,6 @@ module timberman {
     opens start.window to javafx.fxml;
     exports start.window;
 
-    opens options.window to javafx.fxml;
-    exports options.window;
-
     opens result.window to javafx.fxml;
     exports result.window;
 

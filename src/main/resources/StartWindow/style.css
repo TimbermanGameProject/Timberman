@@ -1,30 +1,44 @@
-.root{
-    -fx-background-image: url("startWindowBackground.jpg");
-    -fx-font-size: 48px;
-    -fx-font-family: "Consolas";
+#logo{
+
+
+    -fx-background-image: url("img/logo.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% auto;
+    -fx-background-position: center center;
 }
 
-#titleLabel{
-    -fx-font-size: 124px;
-    -fx-text-fill: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0), 12, 0.9, 0.0, 0.0);
-    -fx-font-weight: bold;
+.menuButton{
+
+    -fx-background-image: url("img/button.png");
+    -fx-background-color: rgba(170, 255, 0, 0);
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% auto;
+    -fx-background-position: center center;
+
+    -fx-font-size: 40px;
+    -fx-text-alignment: center;
+    -fx-font-family: "Snap ITC";
+    -fx-text-fill: #c48200;
+
 }
 
-.button{
-    -fx-cursor: hand;
-    -fx-text-fill: white;
-    -fx-background-color: black;
-    -fx-font-weight: bold;
-    -fx-border-color: white;
-    -fx-border-width: 5;
-    -fx-background-radius: 15px;
-    -fx-border-radius: 10px;
+.menuFIeld{
+    -fx-background-color: rgba(170, 255, 0, 0.12);
+    -fx-max-height: 100px;
 }
+.menuContainer{
+    -fx-font-size: 26px;
+    -fx-text-alignment: center;
+    -fx-font-family: "Snap ITC";
 
-.button:hover{
-    -fx-background-color: rgba(20, 20, 20);
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-    -fx-scale-z: 1.1;
+    -fx-background-color: rgba(77, 30, 1, 0.8);
+    -fx-background-radius: 20px;
+
+    -fx-border-color: rgb(47, 30, 0, 0.9);
+    -fx-border-radius: 20px;
+    -fx-border-style: solid;
+    -fx-border-width: 4px;
+
+    -fx-min-width: 400px;
+    -fx-padding: 50px;
 }

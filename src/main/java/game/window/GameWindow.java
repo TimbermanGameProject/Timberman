@@ -15,10 +15,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import options.window.OptionsWindow;
-import options.window.OptionsWindowController;
 import result.window.ResultWindow;
 import start.window.StartWindow;
+import start.window.StartWindowController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,12 +30,12 @@ public class GameWindow extends Application {
     public static int numberOfPlayers;
     private ArrayList<PlayerPane> players;
     public static int[] playerPoints;
-    private int startTime = OptionsWindowController.timeValue * 60;
+    private int startTime = StartWindowController.timeValue * 60;
     private int delay = 1000;
     private Timeline timer;
 
     public GameWindow(){
-        numberOfPlayers = OptionsWindowController.playerValue;
+        numberOfPlayers = StartWindowController.playerValue;
         players = new ArrayList<>();
         playerPoints = new int[numberOfPlayers];
     }
