@@ -1,39 +1,25 @@
 package game.window;
 
 
-import javafx.animation.*;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import options.window.OptionsWindowController;
 
 
-import java.util.Objects;
+import java.io.IOException;
+import java.util.Random;
 
 
-public class PlayerPane extends GridPane {
+public class PlayerPane extends StackPane {
     public static final int[] charactersID = {0, 1, 2};
     private static final int PENALTY_POINTS = -10;
-    private int currentSite = 0;
+    private int currentSide = 0;
+    public static final int LEFT_SIDE = 0;
+    public static final int RIGHT_SIDE = 1;
 
     private double width;
     private double height;
@@ -51,45 +37,148 @@ public class PlayerPane extends GridPane {
 
     private ImageView lumberjack;
 
+    private GridPane trunkLayer;
+    private GridPane branchLayer;
+    private GridPane playerLayer;
+
     public PlayerPane(Stage stage, int id) {
-        width = stage.getScene().getWidth() / GameWindow.numberOfPlayers;
-        height = stage.getScene().getHeight();
-        columnNumber = 3;
-        rowNumber = 3;
-        this.stage = stage;
-
-        setPrefHeight(height);
-        setPrefWidth(width);
-        setGridLinesVisible(true); // TEMPORARILY
-
-        //LUMBERJACK INIT
-        String imgPath = "/GameWindow/characters/character_" + id + ".png";
-        Image img = new Image(Objects.requireNonNull(getClass().getResource(imgPath)).toExternalForm());
-        lumberjack = new ImageView(img);
-
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GameWindow/PlayerPane/GamePanel.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
         //CHOPPING SOUND INIT
         initChoppingSound();
 
         //OUCH SOUND INIT
         initOuchSound();
+        branchLayer = (GridPane) this.lookup("#branchLayer");
+        pointsLabel = (Label) this.lookup("#pointsLabel");
+        timeLabel = (Label) this.lookup("#timeLabel");
+    }
 
-        setHalignment(lumberjack, HPos.CENTER);
-        setValignment(lumberjack, VPos.CENTER);
+    //TODO: Method uses long algorithm, maybe can be changed to be faster
+    public void lowerBranches() {
+    }
 
-        for (int i = 0; i < columnNumber; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / columnNumber);
-            getColumnConstraints().add(colConst);
+    boolean roll(int chance) {
+        return new Random().nextInt(chance) == 0;
+    }
+
+    //BRANCH HAS 50% TO BE ADDED AND THEN 50% TO SPAWN ON EITHER SIDE
+    public void addBranch() {
+        //DO NOT ADD BRANCH
+        if (roll(4))
+            return;
+
+        boolean isRightSide = roll(2);
+        String side = isRightSide ? "right" : "left";
+        int size = roll(2) ? 1 : 0;
+
+        String imgPath = "/GameWindow/PlayerPane/img/tree/" + side + "_" + size + ".png";
+        String css = "-fx-background-image: url(" + imgPath + ")";
+
+        Pane topBranch = (Pane) branchLayer.lookup("#branch_5");
+        topBranch.setStyle(css);
+    }
+
+    void clearBranch(Pane branch) {
+        try {
+            branch.getStyleClass().remove("branchLeftBig");
+            branch.getStyleClass().remove("branchLeftSmall");
+            branch.getStyleClass().remove("branchRightBig");
+            branch.getStyleClass().remove("branchRightSmall");
+        } finally {
+            branch.getStyleClass().add("branchEmpty");
         }
-        for (int i = 0; i < rowNumber; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / rowNumber);
-            getRowConstraints().add(rowConst);
+    }
+
+    //TODO: make some animation when lumberjack hits branch
+    public void checkForCollision() {
+        Pane bottomBranch = (Pane) branchLayer.lookup("#branch_1");
+
+        //NO COLLISION
+        if (bottomBranch.getStyleClass().contains("branchEmpty")) {
+            updatePoints(1);
+            chopDownTreeAnimation();
+            choppingSound.seek(choppingSound.getStartTime());
+            choppingSound.play();
         }
-        addTree();
-        addTimeLabel();
-        addPointsLabel();
-        placeLumberjack(0);
+        //COLLISION
+        else {
+            //todo have to check where the player is :P
+            clearBranch(bottomBranch);
+            //todo uncomment animation
+            //addNegativePointAnimation();
+            updatePoints(PENALTY_POINTS);
+            chopDownTreeAnimation();
+            ouchSound.seek(choppingSound.getStartTime());
+            ouchSound.play();
+        }
+
+
+    }
+
+    public void chopDownTreeAnimation() {
+//        double treeWidth = width / 3 - 0.5;
+//        double treeHeight = height / 3;
+//        Rectangle tree = new Rectangle(treeWidth, treeHeight);
+//        Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
+//        tree.setFill(new ImagePattern(img));
+//        tree.setStrokeWidth(2.5);
+//        setHalignment(tree, HPos.CENTER);
+//        add(tree, 1, 2);
+//
+//        //All animations
+//        ParallelTransition pt = new ParallelTransition();
+//        pt.setOnFinished(e -> getChildren().remove(tree));
+//
+//        //Animation rotate
+//        RotateTransition rotate = new RotateTransition(Duration.millis(250));
+//        rotate.setNode(tree);
+//        rotate.setByAngle(360);
+//        pt.getChildren().add(rotate);
+//
+//        //Animation translate
+//        TranslateTransition translate = new TranslateTransition(Duration.millis(250));
+//        translate.setNode(tree);
+//        int colIndex = getColumnIndex(lumberjack);
+//        translate.setByX(colIndex == 0 ? treeWidth : -treeWidth);
+//        translate.setByY(treeHeight);
+//        pt.getChildren().add(translate);
+//
+//        //Animation scale
+//        ScaleTransition scale = new ScaleTransition(Duration.millis(100));
+//        scale.setNode(tree);
+//        scale.setFromX(1);
+//        scale.setFromY(1);
+//        scale.setToX(0.7);
+//        scale.setToY(0.7);
+//        pt.getChildren().add(scale);
+//
+//        //Play all animations
+//        pt.play();
+    }
+
+    public void placeLumberjack(int colIndex) {
+        flipLumberjack(colIndex);
+        //GridPane player = (GridPane) this.lookup("#playerLayer");
+    }
+
+    private void flipLumberjack(int site) {
+        if (site != currentSide) {
+            currentSide = site;
+            System.out.println("Current site is " + site);
+        }
+    }
+
+    public void removeLumberjack() {
+        System.out.println("remove lumber jack");
+        ImageView player = (ImageView) this.lookup(".lumberjack");
+        playerLayer.getChildren().remove(player);
     }
 
     public void changeTime(int time) {
@@ -98,215 +187,6 @@ public class PlayerPane extends GridPane {
         String output = String.format("%d:%02d", minutes, seconds);
         timeLabel.setText(output);
     }
-
-    public void addTree() {
-        double treeWidth = width / 3 - 0.5;
-        double treeHeight = height / 3;
-        for (int i = 0; i < 3; i++) {
-            Rectangle tree = new Rectangle(treeWidth, treeHeight);
-            Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
-            tree.setFill(new ImagePattern(img));
-            tree.setStrokeWidth(2.5);
-            setHalignment(tree, HPos.CENTER);
-            add(tree, 1, i);
-        }
-    }
-
-    public void addTimeLabel() {
-        int minutes = OptionsWindowController.timeValue;
-        int seconds = 0;
-        String output = String.format("%d:%02d", minutes, seconds);
-
-        timeLabel = new Label(output);
-        timeLabel.setPrefWidth(width / 3 - 50);
-        timeLabel.setPrefHeight(height / 3 - 200);
-        timeLabel.setFont(new Font("Consolas", (int) (100 / GameWindow.numberOfPlayers)));
-        timeLabel.setAlignment(Pos.CENTER);
-        setHalignment(timeLabel, HPos.CENTER);
-        setValignment(timeLabel, VPos.TOP);
-        timeLabel.getStyleClass().add("timeLabel");
-        add(timeLabel, 1, 0);
-    }
-
-    public void addPointsLabel() {
-        pointsLabel = new Label(Integer.toString(points));
-        pointsLabel.setPrefWidth(width / 4 - 30);
-        pointsLabel.setPrefHeight(height / 5 - 200);
-        pointsLabel.setFont(new Font("Consolas", (int) (75 / GameWindow.numberOfPlayers)));
-        pointsLabel.setAlignment(Pos.CENTER);
-        setHalignment(pointsLabel, HPos.CENTER);
-        setValignment(pointsLabel, VPos.BOTTOM);
-        pointsLabel.getStyleClass().add("pointsLabel");
-        add(pointsLabel, 1, 0);
-    }
-
-    public void placeLumberjack(int colIndex) {
-        flipLumberjack(colIndex);
-        add(lumberjack, colIndex, 2);
-    }
-
-    private void flipLumberjack(int site) {
-        if (site != currentSite) {
-            int flipAnkle = 180;
-            double imageWidth = lumberjack.getImage().getWidth();
-            currentSite = site;
-            Translate flipTranslation = new Translate(-imageWidth, 0);
-            Rotate flipRotation = new Rotate(flipAnkle, Rotate.Y_AXIS);
-            lumberjack.getTransforms().addAll(flipRotation, flipTranslation);
-        }
-    }
-
-    public void removeLumberjack() {
-        for (Node node : getChildren()) {
-            if (node instanceof ImageView) {
-                getChildren().remove(node);
-                break;
-            }
-        }
-    }
-
-    //BRANCH HAS 50% TO BE ADDED AND THEN 50% TO SPAWN ON EITHER SIDE
-    public void addBranch() {
-        //DO NOT ADD BRANCH
-        if (Math.floor(Math.random() * 2) % 2 == 1) {
-            return;
-        }
-        Branch branch = new Branch(stage);
-        int branchColumn = Math.floor(Math.random() * 2) % 2 == 1 ? 0 : 2;
-        setValignment(branch, VPos.CENTER);
-        setHalignment(branch, branchColumn == 0 ? HPos.RIGHT : HPos.LEFT);
-        add(branch, branchColumn, 0);
-    }
-
-    //TODO: make some animation when lumberjack hits branch
-    public void checkForCollision() {
-        Branch branch = null;
-        for (Node node : getChildren()) {
-            if (node instanceof Branch && getRowIndex(node) == 2) {
-                branch = (Branch) node;
-            }
-        }
-        //COLLISION
-        if (branch != null && Objects.equals(getColumnIndex(branch), getColumnIndex(lumberjack))) {
-            //lumberjack.setFill(Color.RED);
-            getChildren().remove(branch);
-            addNegativePointAnimation();
-            updatePoints(PENALTY_POINTS);
-            chopDownTreeAnimation();
-            ouchSound.seek(choppingSound.getStartTime());
-            ouchSound.play();
-        }
-        //NO COLLISION
-        else {
-            updatePoints(1);
-            chopDownTreeAnimation();
-            choppingSound.seek(choppingSound.getStartTime());
-            choppingSound.play();
-        }
-    }
-
-    //TODO: Method uses long algorithm, maybe can be changed to be faster
-    public void lowerBranches() {
-        Branch[] branches = new Branch[6];
-        int[] columns = new int[6];
-        int[] rows = new int[6];
-        int i = 0;
-        //FIND ALL BRANCHES (CAN'T UPDATE CORDS RIGHT AWAY AS IT THROWS AN ERROR)
-        for (Node node : getChildren()) {
-            if (node instanceof Branch) {
-                branches[i] = (Branch) node;
-                columns[i] = getColumnIndex(node);
-                rows[i] = getRowIndex(node);
-                i++;
-            }
-        }
-        //REMOVE ALL BRANCHES
-        getChildren().removeAll(branches);
-        //ADD NEW BRANCHES WITH UPDATED CORDS
-        for (int j = 0; j < i; j++) {
-            if (rows[j] < 2) {
-                Branch branch = new Branch(stage);
-                setValignment(branch, VPos.CENTER);
-                setHalignment(branch, columns[j] == 0 ? HPos.RIGHT : HPos.LEFT);
-                add(branch, columns[j], rows[j] + 1);
-            }
-        }
-    }
-
-    public void updatePoints(int toAdd) {
-        points += toAdd;
-        if (points < 0)
-            points = 0;
-        pointsLabel.setText(Integer.toString(points));
-    }
-
-    public void addNegativePointAnimation() {
-        Text text = new Text(Integer.toString(PENALTY_POINTS));
-        setValignment(text, VPos.TOP);
-        setHalignment(text, HPos.CENTER);
-        text.setFont(new Font("Consolas", (int) (75 / GameWindow.numberOfPlayers)));
-        text.setFill(Color.valueOf("#FF4E4E"));
-        text.setStroke(Color.BLACK);
-        text.setStrokeWidth(1.5);
-        setMargin(text, new Insets(15, 0, 0, 0));
-        text.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 10, 0.5, 0.0, 0.0);");
-        add(text, 1, 1);
-
-        //Animation
-        FadeTransition fadeTransition = new FadeTransition();
-        fadeTransition.setNode(text);
-        fadeTransition.setDuration(Duration.millis(1500));
-        fadeTransition.setFromValue(1);
-        fadeTransition.setToValue(0);
-        fadeTransition.setOnFinished(e -> getChildren().remove(text));
-        fadeTransition.play();
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void chopDownTreeAnimation() {
-        double treeWidth = width / 3 - 0.5;
-        double treeHeight = height / 3;
-        Rectangle tree = new Rectangle(treeWidth, treeHeight);
-        Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
-        tree.setFill(new ImagePattern(img));
-        tree.setStrokeWidth(2.5);
-        setHalignment(tree, HPos.CENTER);
-        add(tree, 1, 2);
-
-        //All animations
-        ParallelTransition pt = new ParallelTransition();
-        pt.setOnFinished(e -> getChildren().remove(tree));
-
-        //Animation rotate
-        RotateTransition rotate = new RotateTransition(Duration.millis(250));
-        rotate.setNode(tree);
-        rotate.setByAngle(360);
-        pt.getChildren().add(rotate);
-
-        //Animation translate
-        TranslateTransition translate = new TranslateTransition(Duration.millis(250));
-        translate.setNode(tree);
-        int colIndex = getColumnIndex(lumberjack);
-        translate.setByX(colIndex == 0 ? treeWidth : -treeWidth);
-        translate.setByY(treeHeight);
-        pt.getChildren().add(translate);
-
-        //Animation scale
-        ScaleTransition scale = new ScaleTransition(Duration.millis(100));
-        scale.setNode(tree);
-        scale.setFromX(1);
-        scale.setFromY(1);
-        scale.setToX(0.7);
-        scale.setToY(0.7);
-        pt.getChildren().add(scale);
-
-        //Play all animations
-        pt.play();
-    }
-
     public void initChoppingSound(){
         choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/chop_chop.mp3").toExternalForm()));
         choppingSound.setVolume(0.6);
@@ -315,5 +195,15 @@ public class PlayerPane extends GridPane {
     public void initOuchSound(){
         ouchSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/ouch.mp3").toExternalForm()));
         ouchSound.setVolume(0.6);
+    }
+    public int getPoints() {
+        return points;
+    }
+
+    public void updatePoints(int toAdd) {
+        points += toAdd;
+        if (points < 0)
+            points = 0;
+        pointsLabel.setText(Integer.toString(points));
     }
 }

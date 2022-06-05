@@ -6,11 +6,13 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import options.window.OptionsWindow;
@@ -40,22 +42,21 @@ public class GameWindow extends Application {
     }
 
     public Parent createContent(Stage stage){
-        FlowPane flowPane = new FlowPane(); // MAIN PANE WHICH HOLDS EACH PLAYER'S PANES
-        flowPane.getStyleClass().add("GameWindow"); // FOR CSS STYLING
-
-        flowPane.setPrefHeight(stage.getScene().getHeight());
-        flowPane.setPrefWidth(stage.getScene().getHeight());
+        HBox playersContainer = new HBox(); // MAIN PANE WHICH HOLDS EACH PLAYER'S PANES
+        playersContainer.getStyleClass().add("GameWindow"); // FOR CSS STYLING
+        playersContainer.setSpacing(10);
+        playersContainer.setAlignment(Pos.CENTER);
+        playersContainer.setPrefWidth(stage.getScene().getWidth());
 
         //ADDING PLAYER PANES HERE
         for(int i = 0;i<numberOfPlayers;i++){
             PlayerPane playerPane = new PlayerPane(stage, i);
-            playerPane.getStyleClass().add("PlayerPane"); //FOR CSS STYLING
             players.add(playerPane);
-            flowPane.getChildren().add(playerPane);
+            playersContainer.getChildren().add(playerPane);
         }
         timerInterval(stage);
 
-        return flowPane;
+        return playersContainer;
     }
 
     private void timerInterval(Stage stage) {
@@ -105,23 +106,21 @@ public class GameWindow extends Application {
                     }
                     break;
                 case A:
-                    players.get(0).removeLumberjack();
-                    players.get(0).placeLumberjack(0);
+                    System.out.println("essa KLINALES A");
+                    players.get(0).placeLumberjack(PlayerPane.LEFT_SIDE);
                     players.get(0).lowerBranches();
                     players.get(0).checkForCollision();
                     players.get(0).addBranch();
                     break;
                 case D:
-                    players.get(0).removeLumberjack();
-                    players.get(0).placeLumberjack(2);
+                    players.get(0).placeLumberjack(PlayerPane.RIGHT_SIDE);
                     players.get(0).lowerBranches();
                     players.get(0).checkForCollision();
                     players.get(0).addBranch();
                     break;
                 case J:
                     if (numberOfPlayers >= 2) {
-                        players.get(1).removeLumberjack();
-                        players.get(1).placeLumberjack(0);
+                        players.get(1).placeLumberjack(PlayerPane.LEFT_SIDE);
                         players.get(1).lowerBranches();
                         players.get(1).checkForCollision();
                         players.get(1).addBranch();
@@ -129,8 +128,7 @@ public class GameWindow extends Application {
                     break;
                 case L:
                     if (numberOfPlayers >= 2) {
-                        players.get(1).removeLumberjack();
-                        players.get(1).placeLumberjack(2);
+                        players.get(1).placeLumberjack(PlayerPane.RIGHT_SIDE);
                         players.get(1).lowerBranches();
                         players.get(1).checkForCollision();
                         players.get(1).addBranch();
@@ -138,8 +136,7 @@ public class GameWindow extends Application {
                     break;
                 case NUMPAD4:
                     if (numberOfPlayers == 3) {
-                        players.get(2).removeLumberjack();
-                        players.get(2).placeLumberjack(0);
+                        players.get(2).placeLumberjack(PlayerPane.LEFT_SIDE);
                         players.get(2).lowerBranches();
                         players.get(2).checkForCollision();
                         players.get(2).addBranch();
@@ -147,8 +144,7 @@ public class GameWindow extends Application {
                     break;
                 case NUMPAD6:
                     if (numberOfPlayers == 3) {
-                        players.get(2).removeLumberjack();
-                        players.get(2).placeLumberjack(2);
+                        players.get(2).placeLumberjack(PlayerPane.RIGHT_SIDE);
                         players.get(2).lowerBranches();
                         players.get(2).checkForCollision();
                         players.get(2).addBranch();

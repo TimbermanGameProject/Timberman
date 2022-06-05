@@ -1,5 +1,10 @@
 .GameWindow{
-    -fx-background-color: white;
+    -fx-background-repeat:  no-repeat;
+    /*-fx-background-size: 100% auto;*/
+    /*-fx-background-position: center center;*/
+    -fx-background-size: 100% auto;
+    -fx-background-position: bottom left;
+    -fx-background-image: url("background.jpg");
 }
 
 .PlayerPane{

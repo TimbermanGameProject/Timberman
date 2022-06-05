@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.PerspectiveTransform?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root prefHeight="800.0" prefWidth="632.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane id="branchLayer" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1200.0" minHeight="-Infinity" minWidth="400.0" prefHeight="800.0" stylesheets="@style.css">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <Pane id="branch_0" disable="true" prefHeight="200.0" prefWidth="200.0" styleClass="branch" stylesheets="@style.css" visible="false" GridPane.rowIndex="5" />
+      <Pane id="branch_1" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" GridPane.rowIndex="4">
+            <styleClass>
+               <String fx:value="branch" />
+               <String fx:value="branchLeftBig" />
+            </styleClass>
+         </Pane>
+      <Pane id="branch_2" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" GridPane.rowIndex="3">
+            <styleClass>
+               <String fx:value="branch" />
+               <String fx:value="branchEmpty" />
+            </styleClass>
+         </Pane>
+      <Pane id="branch_3" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" GridPane.rowIndex="2">
+            <styleClass>
+               <String fx:value="branch" />
+               <String fx:value="branchRightSmall" />
+            </styleClass>
+         </Pane>
+      <Pane id="branch_4" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" GridPane.rowIndex="1">
+            <styleClass>
+               <String fx:value="branch" />
+               <String fx:value="branchLeftBig" />
+            </styleClass>
+         </Pane>
+      <Pane id="branch_5" prefHeight="200.0" prefWidth="200.0" styleClass="branch" stylesheets="@style.css" />
+   </children>
+</GridPane>
+<GridPane id="trunkLayer" maxHeight="1.7976931348623157E308" maxWidth="1200.0" minHeight="-Infinity" minWidth="400.0" prefHeight="800.0" stylesheets="@style.css">
+  <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Pane id="floor_0" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" styleClass="floor" stylesheets="@style.css" GridPane.rowIndex="5" />
+      <Pane id="floor_1" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" styleClass="floor" stylesheets="@style.css" GridPane.rowIndex="4" />
+      <Pane id="floor_2" prefHeight="200.0" prefWidth="200.0" styleClass="floor" stylesheets="@style.css" GridPane.rowIndex="3" />
+      <Pane id="floor_3" prefHeight="200.0" prefWidth="200.0" styleClass="floor" stylesheets="@style.css" GridPane.rowIndex="2" />
+      <Pane id="floor_4" prefHeight="200.0" prefWidth="200.0" styleClass="floor" stylesheets="@style.css" GridPane.rowIndex="1" />
+      <Pane id="floor_5" prefHeight="200.0" prefWidth="200.0" styleClass="floor" stylesheets="@style.css" />
+   </children>
+</GridPane>
+<GridPane id="playerLayer" maxHeight="1.7976931348623157E308" maxWidth="1200.0" minHeight="100.0" minWidth="400.0">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Pane id="playerPaneRight" prefHeight="200.0" prefWidth="200.0" styleClass="playerPane" stylesheets="@style.css" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <effect>
+               <PerspectiveTransform />
+            </effect></Pane>
+      <Pane id="playerPaneLeft" prefHeight="200.0" prefWidth="200.0" styleClass="playerPane" stylesheets="@style.css" GridPane.rowIndex="2" />
+   </children>
+      <padding>
+         <Insets bottom="20.0" left="10.0" right="10.0" />
+      </padding>
+</GridPane>
+   <GridPane>
+     <columnConstraints>
+       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+     </columnConstraints>
+     <rowConstraints>
+       <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+     </rowConstraints>
+      <children>
+         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+            <children>
+               <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="200.0">
+                  <children>
+                     <Pane id="sign" prefHeight="167.0" prefWidth="250.0" stylesheets="@style.css">
+                        <children>
+                           <Label id="timeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="52.0" layoutY="32.0" prefHeight="46.0" prefWidth="157.0" text="00:59">
+                              <font>
+                                 <Font size="31.0" />
+                              </font>
+                           </Label>
+                           <Label id="pointsLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="52.0" layoutY="68.0" prefHeight="66.0" prefWidth="157.0" text="100" textAlignment="CENTER" textFill="#a40800">
+                              <font>
+                                 <Font size="45.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </Pane>
+                  </children>
+               </VBox>
+            </children>
+         </HBox>
+      </children>
+   </GridPane>
+</fx:root>
