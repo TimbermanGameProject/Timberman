@@ -12,13 +12,14 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 
 public class PlayerPane extends StackPane {
     public static final int[] charactersID = {0, 1, 2};
     private static final int PENALTY_POINTS = -10;
-    private int currentSide = 0;
+    private int currentPlayerSide = 0;
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
     public static final int EMPTY_SIDE = 2;
@@ -58,12 +59,37 @@ public class PlayerPane extends StackPane {
         //OUCH SOUND INIT
         initOuchSound();
         branchLayer = (GridPane) this.lookup("#branchLayer");
+        playerLayer = (GridPane) this.lookup("#playerLayer");
         pointsLabel = (Label) this.lookup("#pointsLabel");
         timeLabel = (Label) this.lookup("#timeLabel");
     }
 
     //TODO: Method uses long algorithm, maybe can be changed to be faster
     public void lowerBranches() {
+        ArrayList<Pane> branches = new ArrayList<>();
+        for(int i = 0;i<6;i++){
+            branches.add((Pane) branchLayer.lookup("#branch_" + i));
+        }
+        String css = ((Pane)branchLayer.lookup("#branch_0")).getStyle();
+        for(int i = 1;i<branches.size() - 1;i++){
+            //copyProperties(branches.get(i+1), branches.get(i));
+        }
+        /*Pane branch5 = (Pane) branchLayer.lookup("#branch_5");
+        Pane branch4 = (Pane) branchLayer.lookup("#branch_4");
+        Pane branch3 = (Pane) branchLayer.lookup("#branch_3");
+        Pane branch2 = (Pane) branchLayer.lookup("#branch_2");
+        Pane branch1 = (Pane) branchLayer.lookup("#branch_1");
+        Pane branch0 = (Pane) branchLayer.lookup("#branch_0");*/
+
+
+    }
+
+    public void copyProperties(Pane branchSrc, Pane branchDst){
+        String srcStyle = branchSrc.getStyle();
+        branchSrc.getStyleClass().clear();
+        branchSrc.getStyleClass().add(branchDst.getStyle());
+        branchDst.getStyleClass().clear();
+        branchDst.getStyleClass().add(srcStyle);
     }
 
     boolean roll(int chance) {
@@ -89,10 +115,8 @@ public class PlayerPane extends StackPane {
 
     void clearBranch(Pane branch) {
         try {
-            branch.getStyleClass().remove("branchLeftBig");
-            branch.getStyleClass().remove("branchLeftSmall");
-            branch.getStyleClass().remove("branchRightBig");
-            branch.getStyleClass().remove("branchRightSmall");
+            branch.getStyleClass().remove("branchLeft");
+            branch.getStyleClass().remove("branchRight");
         } finally {
             branch.getStyleClass().add("branchEmpty");
         }
@@ -106,6 +130,7 @@ public class PlayerPane extends StackPane {
         if (bottomBranch.getStyleClass().contains("branchEmpty")) {
             updatePoints(1);
             chopDownTreeAnimation();
+            clearBranch(bottomBranch);
             choppingSound.seek(choppingSound.getStartTime());
             choppingSound.play();
         }
@@ -117,7 +142,7 @@ public class PlayerPane extends StackPane {
             //addNegativePointAnimation();
             updatePoints(PENALTY_POINTS);
             chopDownTreeAnimation();
-            ouchSound.seek(choppingSound.getStartTime());
+            ouchSound.seek(ouchSound.getStartTime());
             ouchSound.play();
         }
 
@@ -166,8 +191,8 @@ public class PlayerPane extends StackPane {
     }
 
     public void placeLumberjack(int side) {
-        if (side != currentSide) {
-            currentSide = side;
+        if (side != currentPlayerSide) {
+            currentPlayerSide = side;
             Pane player = (Pane) this.lookup("#playerPane");
             setSideCssClass(player, side);
         }
