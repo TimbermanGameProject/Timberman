@@ -106,48 +106,27 @@ public class GameWindow extends Application {
                     break;
                 case A:
                     System.out.println("essa KLINALES A");
-                    players.get(0).placeLumberjack(PlayerPane.LEFT_SIDE);
-                    players.get(0).lowerBranches();
-                    players.get(0).checkForCollision();
-                    players.get(0).addBranch();
+                    players.get(0).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case D:
-                    players.get(0).placeLumberjack(PlayerPane.RIGHT_SIDE);
-                    players.get(0).lowerBranches();
-                    players.get(0).checkForCollision();
-                    players.get(0).addBranch();
+                    System.out.println("essa KLINALES D");
+                    players.get(0).makeMove(PlayerPane.RIGHT_SIDE);
                     break;
                 case J:
-                    if (numberOfPlayers >= 2) {
-                        players.get(1).placeLumberjack(PlayerPane.LEFT_SIDE);
-                        players.get(1).lowerBranches();
-                        players.get(1).checkForCollision();
-                        players.get(1).addBranch();
-                    }
+                    if (numberOfPlayers >= 2)
+                        players.get(1).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case L:
-                    if (numberOfPlayers >= 2) {
-                        players.get(1).placeLumberjack(PlayerPane.RIGHT_SIDE);
-                        players.get(1).lowerBranches();
-                        players.get(1).checkForCollision();
-                        players.get(1).addBranch();
-                    }
+                    if (numberOfPlayers >= 2)
+                        players.get(1).makeMove(PlayerPane.RIGHT_SIDE);
                     break;
                 case NUMPAD4:
-                    if (numberOfPlayers == 3) {
-                        players.get(2).placeLumberjack(PlayerPane.LEFT_SIDE);
-                        players.get(2).lowerBranches();
-                        players.get(2).checkForCollision();
-                        players.get(2).addBranch();
-                    }
+                    if (numberOfPlayers == 3)
+                        players.get(0).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case NUMPAD6:
-                    if (numberOfPlayers == 3) {
-                        players.get(2).placeLumberjack(PlayerPane.RIGHT_SIDE);
-                        players.get(2).lowerBranches();
-                        players.get(2).checkForCollision();
-                        players.get(2).addBranch();
-                    }
+                    if (numberOfPlayers == 3)
+                        players.get(2).makeMove(PlayerPane.RIGHT_SIDE);
                     break;
                 default:
                     break;

@@ -14,7 +14,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import static javafx.collections.FXCollections.observableArrayList;
 
 
 public class PlayerPane extends StackPane {
@@ -24,18 +27,9 @@ public class PlayerPane extends StackPane {
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
     public static final int EMPTY_SIDE = 2;
-
-    private double width;
-    private double height;
-    private int columnNumber;
-    private int rowNumber;
     private int points;
-
-    private Stage stage;
-
     private Label timeLabel;
     private Label pointsLabel;
-
     private MediaPlayer choppingSound;
     private MediaPlayer ouchSound;
 
@@ -72,57 +66,52 @@ public class PlayerPane extends StackPane {
             branches.add((Pane) branchLayer.lookup("#branch_" + i));
         }
 
-        ObservableList<String> cssClass = ((Pane) branchLayer.lookup("#branch_0")).getStyleClass();
+        //List<String> cssClass =  branches.get(1).getStyleClass();
 
-
-        ObservableList<String> essa = branches.get(branches.size()-1).getStyleClass();
-        ObservableList<String> backupCssClass = FXCollections.observableArrayList(essa);
-
-        for (int i = branches.size() -2; i > 0; i--) {
+        for (int i = 0; i < branches.size()-1 ; i++) {
             Pane currentBranch = branches.get(i);
-            ObservableList<String> tempCssClass = FXCollections.observableArrayList(branches.get(i).getStyleClass());
-
-            System.out.println(i + ": \n OLD: " + tempCssClass.toString() + "\n NEW:" + backupCssClass);
+            List<String> tempCss =  observableArrayList(currentBranch.getStyleClass());
 
             currentBranch.getStyleClass().clear();
-            currentBranch.getStyleClass().addAll(backupCssClass);
-            backupCssClass = FXCollections.observableArrayList(tempCssClass);
+            currentBranch.setStyle(null);
 
+            Pane higherBranch = branches.get(i+1);
+            List<String> styleClass = higherBranch.getStyleClass();
+            currentBranch.getStyleClass().addAll(styleClass);
+
+//            System.out.println(i +":"+
+//                    "\n OLD: " + currentBranch.getStyleClass() +
+//                    "\n NEW:" + higherBranch.getStyleClass());
 
         }
+        clearBranch(5);
 
-
-    }
-
-    public void copyProperties(Pane branchSrc, Pane branchDst) {
-        ObservableList<String> srcCssClass = branchSrc.getStyleClass();
-        ObservableList<String> dstCssClass = branchDst.getStyleClass();
-
-        branchSrc.getStyleClass().clear();
-        branchSrc.getStyleClass().addAll(dstCssClass);
-
-        branchDst.getStyleClass().clear();
-        branchDst.getStyleClass().addAll(srcCssClass);
 
     }
 
     boolean roll(int chance) {
-        return new Random().nextInt(chance) == 0;
+        int check = new Random().nextInt(chance);
+        System.out.println(check);
+        return check != 1;
     }
 
     //BRANCH HAS 50% TO BE ADDED AND THEN 50% TO SPAWN ON EITHER SIDE
     public void addBranch() {
         //DO NOT ADD BRANCH
-        if (roll(4))
+        if (roll(2)){
             return;
+        }
 
-        boolean isRightSide = roll(2);
+        boolean isRightSide = roll(4);
         String side = isRightSide ? "right" : "left";
         Pane topBranch = (Pane) branchLayer.lookup("#branch_5");
+
+        topBranch.getStyleClass().removeAll("right", "left", "branchRight", "branchLeft", "branchEmpty");
         topBranch.getStyleClass().add(side.equals("right") ? "branchRight" : "branchLeft");
     }
 
-    void clearBranch(Pane branch) {
+    void clearBranch(int id) {
+        Pane branch = (Pane) branchLayer.lookup("#branch_"+id);
         try {
             branch.getStyleClass().remove("branchLeft");
             branch.getStyleClass().remove("branchRight");
@@ -133,20 +122,20 @@ public class PlayerPane extends StackPane {
 
     //TODO: make some animation when lumberjack hits branch
     public void checkForCollision() {
-        Pane bottomBranch = (Pane) branchLayer.lookup("#branch_1");
+        Pane bottomBranch = (Pane) branchLayer.lookup("#branch_0");
 
         //NO COLLISION
         if (bottomBranch.getStyleClass().contains("branchEmpty")) {
             updatePoints(1);
             chopDownTreeAnimation();
-            clearBranch(bottomBranch);
+            //clearBranch(bottomBranch);
             choppingSound.seek(choppingSound.getStartTime());
             choppingSound.play();
         }
         //COLLISION
         else {
             //todo have to check where the player is :P
-            clearBranch(bottomBranch);
+            //clearBranch(bottomBranch);
             //todo uncomment animation
             //addNegativePointAnimation();
             updatePoints(PENALTY_POINTS);
@@ -260,5 +249,13 @@ public class PlayerPane extends StackPane {
         if (points < 0)
             points = 0;
         pointsLabel.setText(Integer.toString(points));
+    }
+
+    public void makeMove(int Side) {
+        placeLumberjack(Side);
+        lowerBranches();
+        checkForCollision();
+        clearBranch(0);
+        addBranch();
     }
 }
