@@ -23,6 +23,8 @@ import static javafx.collections.FXCollections.observableArrayList;
 public class PlayerPane extends StackPane {
     public static final int[] charactersID = {0, 1, 2};
     private static final int PENALTY_POINTS = -10;
+    public static final String CSS_RIGHT_CLASS = "right";
+    public static final String CSS_LEFT_CLASS = "left";
     private int currentPlayerSide = 0;
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
@@ -103,11 +105,11 @@ public class PlayerPane extends StackPane {
         }
 
         boolean isRightSide = roll(4);
-        String side = isRightSide ? "right" : "left";
+        String side = isRightSide ? CSS_RIGHT_CLASS : CSS_LEFT_CLASS;
         Pane topBranch = (Pane) branchLayer.lookup("#branch_5");
 
-        topBranch.getStyleClass().removeAll("right", "left", "branchRight", "branchLeft", "branchEmpty");
-        topBranch.getStyleClass().add(side.equals("right") ? "branchRight" : "branchLeft");
+        topBranch.getStyleClass().removeAll(CSS_RIGHT_CLASS, CSS_LEFT_CLASS, "branchRight", "branchLeft", "branchEmpty");
+        topBranch.getStyleClass().add(side.equals(CSS_RIGHT_CLASS) ? "branchRight" : "branchLeft");
     }
 
     void clearBranch(int id) {
@@ -199,26 +201,26 @@ public class PlayerPane extends StackPane {
     private void setSideCssClass(Pane pane, int side) {
         switch (side) {
             case LEFT_SIDE -> {
-                pane.getStyleClass().remove("right");
-                pane.getStyleClass().add("left");
+                pane.getStyleClass().remove(CSS_RIGHT_CLASS);
+                pane.getStyleClass().add(CSS_LEFT_CLASS);
             }
             case RIGHT_SIDE -> {
-                pane.getStyleClass().remove("left");
-                pane.getStyleClass().add("right");
+                pane.getStyleClass().remove(CSS_LEFT_CLASS);
+                pane.getStyleClass().add(CSS_RIGHT_CLASS);
             }
             case EMPTY_SIDE -> {
-                pane.getStyleClass().remove("left");
-                pane.getStyleClass().remove("right");
+                pane.getStyleClass().remove(CSS_LEFT_CLASS);
+                pane.getStyleClass().remove(CSS_RIGHT_CLASS);
             }
         }
     }
 
     private String getSideCssClass(Pane pane) {
         ObservableList<String> CssClasses = pane.getStyleClass();
-        if (CssClasses.contains("left"))
-            return "left";
-        else if (CssClasses.contains("left"))
-            return "right";
+        if (CssClasses.contains(CSS_LEFT_CLASS))
+            return CSS_LEFT_CLASS;
+        else if (CssClasses.contains(CSS_RIGHT_CLASS))
+            return CSS_RIGHT_CLASS;
         else
             return "empty";
     }
