@@ -5,25 +5,18 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import result.window.ResultWindow;
-import start.window.StartWindow;
 import start.window.StartWindowController;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameWindow extends Application {
 
@@ -120,7 +113,7 @@ public class GameWindow extends Application {
                     break;
                 case NUMPAD4:
                     if (numberOfPlayers == 3)
-                        players.get(0).makeMove(PlayerPane.LEFT_SIDE);
+                        players.get(2).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case NUMPAD6:
                     if (numberOfPlayers == 3)

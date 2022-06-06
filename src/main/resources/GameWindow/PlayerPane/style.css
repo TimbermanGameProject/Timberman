@@ -30,7 +30,7 @@
 
 .playerPane {
     -fx-background-repeat: stretch;
-    -fx-background-size: auto 100%;
+    -fx-background-size: 100% 90%;
     -fx-background-position: left bottom;
 }
 .playerLeft{
