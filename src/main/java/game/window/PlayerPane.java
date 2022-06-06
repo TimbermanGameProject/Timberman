@@ -1,6 +1,7 @@
 package game.window;
 
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -20,6 +21,7 @@ public class PlayerPane extends StackPane {
     private int currentSide = 0;
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
+    public static final int EMPTY_SIDE = 2;
 
     private double width;
     private double height;
@@ -163,17 +165,40 @@ public class PlayerPane extends StackPane {
 //        pt.play();
     }
 
-    public void placeLumberjack(int colIndex) {
-        flipLumberjack(colIndex);
-        //GridPane player = (GridPane) this.lookup("#playerLayer");
-    }
-
-    private void flipLumberjack(int site) {
-        if (site != currentSide) {
-            currentSide = site;
-            System.out.println("Current site is " + site);
+    public void placeLumberjack(int side) {
+        if (side != currentSide) {
+            currentSide = side;
+            Pane player = (Pane) this.lookup("#playerPane");
+            setSideCssClass(player, side);
         }
     }
+
+    private void setSideCssClass(Pane pane, int side) {
+        switch(side){
+            case LEFT_SIDE -> {
+                pane.getStyleClass().remove("right");
+                pane.getStyleClass().add("left");
+            }
+            case RIGHT_SIDE -> {
+                pane.getStyleClass().remove("left");
+                pane.getStyleClass().add("right");
+            }
+            case EMPTY_SIDE -> {
+                pane.getStyleClass().remove("left");
+                pane.getStyleClass().remove("right");
+            }
+        }
+    }
+    private String getSideCssClass(Pane pane){
+        ObservableList<String> CssClasses = pane.getStyleClass();
+        if(CssClasses.contains("left"))
+            return "left";
+        else if (CssClasses.contains("left"))
+            return "right";
+        else
+            return "empty";
+    }
+
 
     public void removeLumberjack() {
         System.out.println("remove lumber jack");

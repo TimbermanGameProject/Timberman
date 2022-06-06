@@ -30,18 +30,11 @@
 
 .playerPane {
     -fx-background-repeat: stretch;
-    -fx-background-size: auto 80%;
-
-}
-
-#playerPaneLeft {
+    -fx-background-size: auto 100%;
     -fx-background-position: left bottom;
     -fx-background-image: url("img/characters/character_1_left.png");
 }
-#playerPaneRight {
-    -fx-background-position: right bottom;
-    -fx-background-image: url("img/characters/character_1_right.png");
-}
+
 
 .branch {
     -fx-background-repeat: stretch;
@@ -51,23 +44,16 @@
 }
 
 .branchEmpty {
-    -fx-background-color: rgba(12, 12, 14, 0.3);
+    /* make it transparent after debugging */
+    -fx-background-color: rgba(12, 12, 14, 0.4);
 }
 
-.branchLeftBig {
+.branchLeft {
     -fx-background-image: url("img/tree/left_0.png");
 }
 
-.branchLeftSmall {
-    -fx-background-color: rgba(12, 12, 14, 0.3);
-}
-
-.branchRightBig {
+.branchRight {
     -fx-background-image: url("img/tree/right_0.png");
-}
-
-.branchRightSmall {
-    -fx-background-image: url("img/tree/right_1.png");
 }
 
 #sign {
@@ -76,4 +62,11 @@
     -fx-max-width: 250px;
     -fx-background-position: center top;
     -fx-background-image: url("img/sign.png");
+}
+
+.left {
+    -fx-background-color: red;
+}
+.right {
+    -fx-background-color: blue;
 }
