@@ -45,7 +45,7 @@
 
 .branchEmpty {
     /* make it transparent after debugging */
-    -fx-background-color: rgba(12, 12, 14, 0.4);
+    -fx-background-color: rgba(12, 12, 14, 0.1);
 }
 
 .branchLeft {
@@ -65,8 +65,8 @@
 }
 
 .left {
-    -fx-background-color: red;
+    -fx-background-color: rgba(12,12,250,0.1);
 }
 .right {
-    -fx-background-color: blue;
+    -fx-background-color: rgba(250,0,0,0.1);
 }

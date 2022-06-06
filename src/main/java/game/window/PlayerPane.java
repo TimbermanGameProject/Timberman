@@ -1,6 +1,7 @@
 package game.window;
 
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -67,29 +68,42 @@ public class PlayerPane extends StackPane {
     //TODO: Method uses long algorithm, maybe can be changed to be faster
     public void lowerBranches() {
         ArrayList<Pane> branches = new ArrayList<>();
-        for(int i = 0;i<6;i++){
+        for (int i = 0; i < 6; i++) {
             branches.add((Pane) branchLayer.lookup("#branch_" + i));
         }
-        String css = ((Pane)branchLayer.lookup("#branch_0")).getStyle();
-        for(int i = 1;i<branches.size() - 1;i++){
-            //copyProperties(branches.get(i+1), branches.get(i));
+
+        ObservableList<String> cssClass = ((Pane) branchLayer.lookup("#branch_0")).getStyleClass();
+
+
+        ObservableList<String> essa = branches.get(branches.size()-1).getStyleClass();
+        ObservableList<String> backupCssClass = FXCollections.observableArrayList(essa);
+
+        for (int i = branches.size() -2; i > 0; i--) {
+            Pane currentBranch = branches.get(i);
+            ObservableList<String> tempCssClass = FXCollections.observableArrayList(branches.get(i).getStyleClass());
+
+            System.out.println(i + ": \n OLD: " + tempCssClass.toString() + "\n NEW:" + backupCssClass);
+
+            currentBranch.getStyleClass().clear();
+            currentBranch.getStyleClass().addAll(backupCssClass);
+            backupCssClass = FXCollections.observableArrayList(tempCssClass);
+
+
         }
-        /*Pane branch5 = (Pane) branchLayer.lookup("#branch_5");
-        Pane branch4 = (Pane) branchLayer.lookup("#branch_4");
-        Pane branch3 = (Pane) branchLayer.lookup("#branch_3");
-        Pane branch2 = (Pane) branchLayer.lookup("#branch_2");
-        Pane branch1 = (Pane) branchLayer.lookup("#branch_1");
-        Pane branch0 = (Pane) branchLayer.lookup("#branch_0");*/
 
 
     }
 
-    public void copyProperties(Pane branchSrc, Pane branchDst){
-        String srcStyle = branchSrc.getStyle();
+    public void copyProperties(Pane branchSrc, Pane branchDst) {
+        ObservableList<String> srcCssClass = branchSrc.getStyleClass();
+        ObservableList<String> dstCssClass = branchDst.getStyleClass();
+
         branchSrc.getStyleClass().clear();
-        branchSrc.getStyleClass().add(branchDst.getStyle());
+        branchSrc.getStyleClass().addAll(dstCssClass);
+
         branchDst.getStyleClass().clear();
-        branchDst.getStyleClass().add(srcStyle);
+        branchDst.getStyleClass().addAll(srcCssClass);
+
     }
 
     boolean roll(int chance) {
@@ -104,13 +118,8 @@ public class PlayerPane extends StackPane {
 
         boolean isRightSide = roll(2);
         String side = isRightSide ? "right" : "left";
-        int size = roll(2) ? 1 : 0;
-
-        String imgPath = "/GameWindow/PlayerPane/img/tree/" + side + "_" + size + ".png";
-        String css = "-fx-background-image: url(" + imgPath + ")";
-
         Pane topBranch = (Pane) branchLayer.lookup("#branch_5");
-        topBranch.setStyle(css);
+        topBranch.getStyleClass().add(side.equals("right") ? "branchRight" : "branchLeft");
     }
 
     void clearBranch(Pane branch) {
@@ -199,7 +208,7 @@ public class PlayerPane extends StackPane {
     }
 
     private void setSideCssClass(Pane pane, int side) {
-        switch(side){
+        switch (side) {
             case LEFT_SIDE -> {
                 pane.getStyleClass().remove("right");
                 pane.getStyleClass().add("left");
@@ -214,9 +223,10 @@ public class PlayerPane extends StackPane {
             }
         }
     }
-    private String getSideCssClass(Pane pane){
+
+    private String getSideCssClass(Pane pane) {
         ObservableList<String> CssClasses = pane.getStyleClass();
-        if(CssClasses.contains("left"))
+        if (CssClasses.contains("left"))
             return "left";
         else if (CssClasses.contains("left"))
             return "right";
@@ -230,15 +240,17 @@ public class PlayerPane extends StackPane {
         String output = String.format("%d:%02d", minutes, seconds);
         timeLabel.setText(output);
     }
-    public void initChoppingSound(){
+
+    public void initChoppingSound() {
         choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/chop_chop.mp3").toExternalForm()));
         choppingSound.setVolume(0.6);
     }
 
-    public void initOuchSound(){
+    public void initOuchSound() {
         ouchSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/ouch.mp3").toExternalForm()));
         ouchSound.setVolume(0.6);
     }
+
     public int getPoints() {
         return points;
     }

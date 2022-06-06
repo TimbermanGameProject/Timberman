@@ -26,7 +26,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Pane id="branch_0" disable="true" prefHeight="200.0" prefWidth="200.0" styleClass="branch" stylesheets="@style.css" GridPane.rowIndex="5" />
+      <Pane id="branch_0" disable="true" prefHeight="200.0" prefWidth="200.0" styleClass="branchEmpty" stylesheets="@style.css" GridPane.rowIndex="5" />
       <Pane id="branch_1" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css" GridPane.rowIndex="4">
             <styleClass>
                <String fx:value="branch" />
@@ -51,7 +51,11 @@
                <String fx:value="branchLeft" />
             </styleClass>
          </Pane>
-      <Pane id="branch_5" prefHeight="200.0" prefWidth="200.0" styleClass="branch" stylesheets="@style.css" />
+      <Pane id="branch_5" prefHeight="200.0" prefWidth="200.0" stylesheets="@style.css">
+            <styleClass>
+               <String fx:value="branch" />
+               <String fx:value="branchEmpty" />
+            </styleClass></Pane>
    </children>
 </GridPane>
 <GridPane id="trunkLayer" maxHeight="1.7976931348623157E308" maxWidth="1200.0" minHeight="-Infinity" minWidth="400.0" prefHeight="800.0" stylesheets="@style.css">
