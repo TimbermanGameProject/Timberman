@@ -199,13 +199,6 @@ public class PlayerPane extends StackPane {
             return "empty";
     }
 
-
-    public void removeLumberjack() {
-        System.out.println("remove lumber jack");
-        ImageView player = (ImageView) this.lookup(".lumberjack");
-        playerLayer.getChildren().remove(player);
-    }
-
     public void changeTime(int time) {
         int minutes = time / 60;
         int seconds = (time - (time / 60) * 60);
