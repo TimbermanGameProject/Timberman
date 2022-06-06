@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class PlayerPane extends StackPane {
     public static final int[] charactersID = {0, 1, 2};
-    private static final int PENALTY_POINTS = -10;
+    private static final int PENALTY_POINTS = -25;
     public static final String CSS_RIGHT_CLASS = "right";
     public static final String CSS_LEFT_CLASS = "left";
     public static final String CSS_CLASS_BRANCH_RIGHT = "branchRight";
