@@ -25,6 +25,9 @@ public class PlayerPane extends StackPane {
     private static final int PENALTY_POINTS = -10;
     public static final String CSS_RIGHT_CLASS = "right";
     public static final String CSS_LEFT_CLASS = "left";
+    public static final String CSS_CLASS_BRANCH_RIGHT = "branchRight";
+    public static final String CSS_CLASS_BRANCH_LEFT = "branchLeft";
+    public static final String CSS_CLASS_BRANCH_EMPTY = "branchEmpty";
     private int currentPlayerSide = 0;
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
@@ -68,23 +71,15 @@ public class PlayerPane extends StackPane {
             branches.add((Pane) branchLayer.lookup("#branch_" + i));
         }
 
-        //List<String> cssClass =  branches.get(1).getStyleClass();
-
-        for (int i = 0; i < branches.size()-1 ; i++) {
+        for (int i = 0; i < branches.size() - 1; i++) {
             Pane currentBranch = branches.get(i);
-            List<String> tempCss =  observableArrayList(currentBranch.getStyleClass());
 
             currentBranch.getStyleClass().clear();
             currentBranch.setStyle(null);
 
-            Pane higherBranch = branches.get(i+1);
+            Pane higherBranch = branches.get(i + 1);
             List<String> styleClass = higherBranch.getStyleClass();
             currentBranch.getStyleClass().addAll(styleClass);
-
-//            System.out.println(i +":"+
-//                    "\n OLD: " + currentBranch.getStyleClass() +
-//                    "\n NEW:" + higherBranch.getStyleClass());
-
         }
         clearBranch(5);
 
@@ -93,60 +88,58 @@ public class PlayerPane extends StackPane {
 
     boolean roll(int chance) {
         int check = new Random().nextInt(chance);
-        System.out.println(check);
         return check != 1;
     }
 
     //BRANCH HAS 50% TO BE ADDED AND THEN 50% TO SPAWN ON EITHER SIDE
     public void addBranch() {
         //DO NOT ADD BRANCH
-        if (roll(2)){
+        if (roll(2)) {
             return;
         }
 
-        boolean isRightSide = roll(4);
+        boolean isRightSide = roll(3);
         String side = isRightSide ? CSS_RIGHT_CLASS : CSS_LEFT_CLASS;
         Pane topBranch = (Pane) branchLayer.lookup("#branch_5");
 
-        topBranch.getStyleClass().removeAll(CSS_RIGHT_CLASS, CSS_LEFT_CLASS, "branchRight", "branchLeft", "branchEmpty");
-        topBranch.getStyleClass().add(side.equals(CSS_RIGHT_CLASS) ? "branchRight" : "branchLeft");
+        topBranch.getStyleClass().removeAll(CSS_RIGHT_CLASS, CSS_LEFT_CLASS, CSS_CLASS_BRANCH_RIGHT, CSS_CLASS_BRANCH_LEFT, CSS_CLASS_BRANCH_EMPTY);
+        topBranch.getStyleClass().add(side.equals(CSS_RIGHT_CLASS) ? CSS_CLASS_BRANCH_RIGHT : CSS_CLASS_BRANCH_LEFT);
     }
 
     void clearBranch(int id) {
-        Pane branch = (Pane) branchLayer.lookup("#branch_"+id);
+        Pane branch = (Pane) branchLayer.lookup("#branch_" + id);
         try {
-            branch.getStyleClass().remove("branchLeft");
-            branch.getStyleClass().remove("branchRight");
+            branch.getStyleClass().remove(CSS_CLASS_BRANCH_LEFT);
+            branch.getStyleClass().remove(CSS_CLASS_BRANCH_RIGHT);
         } finally {
-            branch.getStyleClass().add("branchEmpty");
+            branch.getStyleClass().add(CSS_CLASS_BRANCH_EMPTY);
         }
     }
 
     //TODO: make some animation when lumberjack hits branch
     public void checkForCollision() {
         Pane bottomBranch = (Pane) branchLayer.lookup("#branch_0");
+        Pane player = (Pane) playerLayer.lookup(".playerPane");
 
-        //NO COLLISION
-        if (bottomBranch.getStyleClass().contains("branchEmpty")) {
-            updatePoints(1);
-            chopDownTreeAnimation();
-            //clearBranch(bottomBranch);
-            choppingSound.seek(choppingSound.getStartTime());
-            choppingSound.play();
-        }
+        String bottomBranchSide = getSideCssClass(bottomBranch);
+        String playerSide = getSideCssClass(player);
+
         //COLLISION
-        else {
-            //todo have to check where the player is :P
-            //clearBranch(bottomBranch);
-            //todo uncomment animation
+        if (bottomBranchSide.equals(playerSide)) {
             //addNegativePointAnimation();
             updatePoints(PENALTY_POINTS);
             chopDownTreeAnimation();
             ouchSound.seek(ouchSound.getStartTime());
             ouchSound.play();
         }
-
-
+        //NO COLLISION
+        else {
+            updatePoints(1);
+            chopDownTreeAnimation();
+            choppingSound.seek(choppingSound.getStartTime());
+            choppingSound.play();
+        }
+        clearBranch(0);
     }
 
     public void chopDownTreeAnimation() {
@@ -193,7 +186,7 @@ public class PlayerPane extends StackPane {
     public void placeLumberjack(int side) {
         if (side != currentPlayerSide) {
             currentPlayerSide = side;
-            Pane player = (Pane) this.lookup("#playerPane");
+            Pane player = (Pane) this.lookup(".playerPane");
             setSideCssClass(player, side);
         }
     }
@@ -202,27 +195,34 @@ public class PlayerPane extends StackPane {
         switch (side) {
             case LEFT_SIDE -> {
                 pane.getStyleClass().remove(CSS_RIGHT_CLASS);
+                pane.getStyleClass().remove("playerRight");
+
                 pane.getStyleClass().add(CSS_LEFT_CLASS);
+                pane.getStyleClass().add("playerLeft");
             }
             case RIGHT_SIDE -> {
                 pane.getStyleClass().remove(CSS_LEFT_CLASS);
+                pane.getStyleClass().remove("playerLeft");
+
                 pane.getStyleClass().add(CSS_RIGHT_CLASS);
+                pane.getStyleClass().add("playerRight");
             }
             case EMPTY_SIDE -> {
                 pane.getStyleClass().remove(CSS_LEFT_CLASS);
                 pane.getStyleClass().remove(CSS_RIGHT_CLASS);
+                pane.getStyleClass().remove("playerRight");
+                pane.getStyleClass().remove("playerLeft");
             }
         }
     }
 
     private String getSideCssClass(Pane pane) {
         ObservableList<String> CssClasses = pane.getStyleClass();
-        if (CssClasses.contains(CSS_LEFT_CLASS))
+        if (CssClasses.contains(CSS_LEFT_CLASS) || CssClasses.contains(CSS_CLASS_BRANCH_LEFT))
             return CSS_LEFT_CLASS;
-        else if (CssClasses.contains(CSS_RIGHT_CLASS))
+        else if (CssClasses.contains(CSS_RIGHT_CLASS) || CssClasses.contains(CSS_CLASS_BRANCH_RIGHT))
             return CSS_RIGHT_CLASS;
-        else
-            return "empty";
+        else return "empty";
     }
 
     public void changeTime(int time) {
@@ -248,8 +248,7 @@ public class PlayerPane extends StackPane {
 
     public void updatePoints(int toAdd) {
         points += toAdd;
-        if (points < 0)
-            points = 0;
+        if (points < 0) points = 0;
         pointsLabel.setText(Integer.toString(points));
     }
 
@@ -257,7 +256,6 @@ public class PlayerPane extends StackPane {
         placeLumberjack(Side);
         lowerBranches();
         checkForCollision();
-        clearBranch(0);
         addBranch();
     }
 }

@@ -105,11 +105,9 @@ public class GameWindow extends Application {
                     }
                     break;
                 case A:
-                    System.out.println("essa KLINALES A");
                     players.get(0).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case D:
-                    System.out.println("essa KLINALES D");
                     players.get(0).makeMove(PlayerPane.RIGHT_SIDE);
                     break;
                 case J:
