@@ -49,7 +49,7 @@ public class GameWindow extends Application {
 
         //ADDING PLAYER PANES HERE
         for(int i = 0;i<numberOfPlayers;i++){
-            PlayerPane playerPane = new PlayerPane(stage, i);
+            PlayerPane playerPane = new PlayerPane(i);
             players.add(playerPane);
             playersContainer.getChildren().add(playerPane);
         }

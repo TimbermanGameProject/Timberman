@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static javafx.collections.FXCollections.observableArrayList;
-
 
 public class PlayerPane extends StackPane {
     public static final int[] charactersID = {0, 1, 2};
@@ -44,7 +42,7 @@ public class PlayerPane extends StackPane {
     private GridPane branchLayer;
     private GridPane playerLayer;
 
-    public PlayerPane(Stage stage, int id) {
+    public PlayerPane(int id) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GameWindow/PlayerPane/GamePanel.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
