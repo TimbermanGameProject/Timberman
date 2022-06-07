@@ -9,6 +9,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import result.window.ResultWindow;
@@ -26,6 +28,10 @@ public class GameWindow extends Application {
     private int startTime = StartWindowController.timeValue * 60;
     private int delay = 1000;
     private Timeline timer;
+
+
+    Media media = new Media(this.getClass().getResource("/Music/timber1.mp3").toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
 
     public GameWindow(){
         numberOfPlayers = StartWindowController.playerValue;
@@ -62,6 +68,7 @@ public class GameWindow extends Application {
                         }
                         if(startTime == 0){
                             timer.stop();
+                            mediaPlayer.stop();
                             for(int i = 0;i<numberOfPlayers;i++){
                                 playerPoints[i] = players.get(i).getPoints();
                             }
@@ -85,6 +92,7 @@ public class GameWindow extends Application {
             switch (e.getCode()) {
                 case Q:
                     timer.stop();
+                    mediaPlayer.stop();
                     for (int i = 0; i < numberOfPlayers; i++) {
                         playerPoints[i] = players.get(i).getPoints();
                     }
@@ -131,6 +139,14 @@ public class GameWindow extends Application {
         stage.getScene().getStylesheets().clear();
         stage.getScene().getStylesheets().add(css);
         stage.getScene().setRoot(createContent(stage));
+
+        if(StartWindowController.checkboxValue){
+            mediaPlayer.setAutoPlay(true);
+            mediaPlayer.setVolume(0.05);
+            mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
+            mediaPlayer.play();
+        }
+
         handleKeys(stage.getScene());
     }
 }

@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import music.handler.MusicHandler;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -30,8 +29,6 @@ public class StartWindowController implements Initializable {
     public static int playerValue = 1;
     public static int timeValue = 1;
 
-    Media media = new Media(this.getClass().getResource("/Music/timber1.mp3").toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(media);
 
     @FXML
     private Button exitButton;
@@ -118,14 +115,6 @@ public class StartWindowController implements Initializable {
         System.out.println("turn off music");
 
         checkboxValue = !checkboxValue;
-
-        if(checkboxValue){
-            mediaPlayer.setAutoPlay(true);
-            mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
-            mediaPlayer.play();
-        } else {
-            mediaPlayer.stop();
-        }
     }
 
     public void startButtonClicked(ActionEvent event) throws IOException {
