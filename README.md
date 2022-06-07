@@ -1,6 +1,7 @@
 # Timberman multiplayer
 Project for KCK classes
 
+# GUI presentation
 <img src="images/mainWindow.jpg" width="90%"/>
 <img src="images/gameWindow.jpg" width="90%"/>
 
