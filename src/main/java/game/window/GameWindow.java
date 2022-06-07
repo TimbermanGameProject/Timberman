@@ -5,57 +5,50 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import options.window.OptionsWindow;
-import options.window.OptionsWindowController;
 import result.window.ResultWindow;
-import start.window.StartWindow;
+import start.window.StartWindowController;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameWindow extends Application {
 
     public static int numberOfPlayers;
     private ArrayList<PlayerPane> players;
     public static int[] playerPoints;
-    private int startTime = OptionsWindowController.timeValue * 60;
+    private int startTime = StartWindowController.timeValue * 60;
     private int delay = 1000;
     private Timeline timer;
 
     public GameWindow(){
-        numberOfPlayers = OptionsWindowController.playerValue;
+        numberOfPlayers = StartWindowController.playerValue;
         players = new ArrayList<>();
         playerPoints = new int[numberOfPlayers];
     }
 
     public Parent createContent(Stage stage){
-        FlowPane flowPane = new FlowPane(); // MAIN PANE WHICH HOLDS EACH PLAYER'S PANES
-        flowPane.getStyleClass().add("GameWindow"); // FOR CSS STYLING
-
-        flowPane.setPrefHeight(stage.getScene().getHeight());
-        flowPane.setPrefWidth(stage.getScene().getHeight());
+        HBox playersContainer = new HBox(); // MAIN PANE WHICH HOLDS EACH PLAYER'S PANES
+        playersContainer.getStyleClass().add("GameWindow"); // FOR CSS STYLING
+        playersContainer.setSpacing(10);
+        playersContainer.setAlignment(Pos.CENTER);
+        playersContainer.setPrefWidth(stage.getScene().getWidth());
 
         //ADDING PLAYER PANES HERE
         for(int i = 0;i<numberOfPlayers;i++){
-            PlayerPane playerPane = new PlayerPane(stage, i);
-            playerPane.getStyleClass().add("PlayerPane"); //FOR CSS STYLING
+            PlayerPane playerPane = new PlayerPane(i);
             players.add(playerPane);
-            flowPane.getChildren().add(playerPane);
+            playersContainer.getChildren().add(playerPane);
         }
         timerInterval(stage);
 
-        return flowPane;
+        return playersContainer;
     }
 
     private void timerInterval(Stage stage) {
@@ -105,54 +98,26 @@ public class GameWindow extends Application {
                     }
                     break;
                 case A:
-                    players.get(0).removeLumberjack();
-                    players.get(0).placeLumberjack(0);
-                    players.get(0).lowerBranches();
-                    players.get(0).checkForCollision();
-                    players.get(0).addBranch();
+                    players.get(0).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case D:
-                    players.get(0).removeLumberjack();
-                    players.get(0).placeLumberjack(2);
-                    players.get(0).lowerBranches();
-                    players.get(0).checkForCollision();
-                    players.get(0).addBranch();
+                    players.get(0).makeMove(PlayerPane.RIGHT_SIDE);
                     break;
                 case J:
-                    if (numberOfPlayers >= 2) {
-                        players.get(1).removeLumberjack();
-                        players.get(1).placeLumberjack(0);
-                        players.get(1).lowerBranches();
-                        players.get(1).checkForCollision();
-                        players.get(1).addBranch();
-                    }
+                    if (numberOfPlayers >= 2)
+                        players.get(1).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case L:
-                    if (numberOfPlayers >= 2) {
-                        players.get(1).removeLumberjack();
-                        players.get(1).placeLumberjack(2);
-                        players.get(1).lowerBranches();
-                        players.get(1).checkForCollision();
-                        players.get(1).addBranch();
-                    }
+                    if (numberOfPlayers >= 2)
+                        players.get(1).makeMove(PlayerPane.RIGHT_SIDE);
                     break;
                 case NUMPAD4:
-                    if (numberOfPlayers == 3) {
-                        players.get(2).removeLumberjack();
-                        players.get(2).placeLumberjack(0);
-                        players.get(2).lowerBranches();
-                        players.get(2).checkForCollision();
-                        players.get(2).addBranch();
-                    }
+                    if (numberOfPlayers == 3)
+                        players.get(2).makeMove(PlayerPane.LEFT_SIDE);
                     break;
                 case NUMPAD6:
-                    if (numberOfPlayers == 3) {
-                        players.get(2).removeLumberjack();
-                        players.get(2).placeLumberjack(2);
-                        players.get(2).lowerBranches();
-                        players.get(2).checkForCollision();
-                        players.get(2).addBranch();
-                    }
+                    if (numberOfPlayers == 3)
+                        players.get(2).makeMove(PlayerPane.RIGHT_SIDE);
                     break;
                 default:
                     break;

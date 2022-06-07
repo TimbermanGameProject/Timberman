@@ -2,255 +2,197 @@ package game.window;
 
 
 import javafx.animation.*;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import options.window.OptionsWindowController;
 
 
-import java.util.Objects;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
-public class PlayerPane extends GridPane {
+public class PlayerPane extends StackPane {
     public static final int[] charactersID = {0, 1, 2};
-    private static final int PENALTY_POINTS = -10;
-    private int currentSite = 0;
-
-    private double width;
-    private double height;
-    private int columnNumber;
-    private int rowNumber;
+    private static final int PENALTY_POINTS = -25;
+    public static final String CSS_RIGHT_CLASS = "right";
+    public static final String CSS_LEFT_CLASS = "left";
+    public static final String CSS_CLASS_BRANCH_RIGHT = "branchRight";
+    public static final String CSS_CLASS_BRANCH_LEFT = "branchLeft";
+    public static final String CSS_CLASS_BRANCH_EMPTY = "branchEmpty";
+    public  String CSS_CLASS_PLAYER_LEFT = "playerLeft";
+    public  String CSS_CLASS_PLAYER_RIGHT = "playerRight";
+    private int currentPlayerSide = 0;
+    public static final int LEFT_SIDE = 0;
+    public static final int RIGHT_SIDE = 1;
+    public static final int EMPTY_SIDE = 2;
     private int points;
-
-    private Stage stage;
-
     private Label timeLabel;
     private Label pointsLabel;
-
     private MediaPlayer choppingSound;
     private MediaPlayer ouchSound;
 
     private ImageView lumberjack;
 
-    public PlayerPane(Stage stage, int id) {
-        width = stage.getScene().getWidth() / GameWindow.numberOfPlayers;
-        height = stage.getScene().getHeight();
-        columnNumber = 3;
-        rowNumber = 3;
-        this.stage = stage;
+    private GridPane trunkLayer;
+    private GridPane branchLayer;
+    private GridPane playerLayer;
 
-        setPrefHeight(height);
-        setPrefWidth(width);
-        setGridLinesVisible(true); // TEMPORARILY
-
-        //LUMBERJACK INIT
-        String imgPath = "/GameWindow/characters/character_" + id + ".png";
-        Image img = new Image(Objects.requireNonNull(getClass().getResource(imgPath)).toExternalForm());
-        lumberjack = new ImageView(img);
-
+    public PlayerPane(int id) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GameWindow/PlayerPane/GamePanel.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
         //CHOPPING SOUND INIT
         initChoppingSound();
 
         //OUCH SOUND INIT
         initOuchSound();
+        branchLayer = (GridPane) this.lookup("#branchLayer");
+        trunkLayer = (GridPane) this.lookup("#trunkLayer");
+        playerLayer = (GridPane) this.lookup("#playerLayer");
+        pointsLabel = (Label) this.lookup("#pointsLabel");
+        timeLabel = (Label) this.lookup("#timeLabel");
 
-        setHalignment(lumberjack, HPos.CENTER);
-        setValignment(lumberjack, VPos.CENTER);
+        CSS_CLASS_PLAYER_RIGHT += id;
+        CSS_CLASS_PLAYER_LEFT += id;
 
-        for (int i = 0; i < columnNumber; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / columnNumber);
-            getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < rowNumber; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / rowNumber);
-            getRowConstraints().add(rowConst);
-        }
-        addTree();
-        addTimeLabel();
-        addPointsLabel();
-        placeLumberjack(0);
+        setPlayerSide(LEFT_SIDE);
     }
 
-    public void changeTime(int time) {
-        int minutes = time / 60;
-        int seconds = (time - (time / 60) * 60);
-        String output = String.format("%d:%02d", minutes, seconds);
-        timeLabel.setText(output);
+    public void initChoppingSound() {
+        choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/chop_chop.mp3").toExternalForm()));
+        choppingSound.setVolume(0.6);
     }
 
-    public void addTree() {
-        double treeWidth = width / 3 - 0.5;
-        double treeHeight = height / 3;
-        for (int i = 0; i < 3; i++) {
-            Rectangle tree = new Rectangle(treeWidth, treeHeight);
-            Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
-            tree.setFill(new ImagePattern(img));
-            tree.setStrokeWidth(2.5);
-            setHalignment(tree, HPos.CENTER);
-            add(tree, 1, i);
-        }
+    public void initOuchSound() {
+        ouchSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/ouch.mp3").toExternalForm()));
+        ouchSound.setVolume(0.6);
     }
 
-    public void addTimeLabel() {
-        int minutes = OptionsWindowController.timeValue;
-        int seconds = 0;
-        String output = String.format("%d:%02d", minutes, seconds);
-
-        timeLabel = new Label(output);
-        timeLabel.setPrefWidth(width / 3 - 50);
-        timeLabel.setPrefHeight(height / 3 - 200);
-        timeLabel.setFont(new Font("Consolas", (int) (100 / GameWindow.numberOfPlayers)));
-        timeLabel.setAlignment(Pos.CENTER);
-        setHalignment(timeLabel, HPos.CENTER);
-        setValignment(timeLabel, VPos.TOP);
-        timeLabel.getStyleClass().add("timeLabel");
-        add(timeLabel, 1, 0);
+    public void makeMove(int Side) {
+        placeLumberjack(Side);
+        lowerBranches();
+        checkForCollision();
+        addBranch();
     }
 
-    public void addPointsLabel() {
-        pointsLabel = new Label(Integer.toString(points));
-        pointsLabel.setPrefWidth(width / 4 - 30);
-        pointsLabel.setPrefHeight(height / 5 - 200);
-        pointsLabel.setFont(new Font("Consolas", (int) (75 / GameWindow.numberOfPlayers)));
-        pointsLabel.setAlignment(Pos.CENTER);
-        setHalignment(pointsLabel, HPos.CENTER);
-        setValignment(pointsLabel, VPos.BOTTOM);
-        pointsLabel.getStyleClass().add("pointsLabel");
-        add(pointsLabel, 1, 0);
-    }
-
-    public void placeLumberjack(int colIndex) {
-        flipLumberjack(colIndex);
-        add(lumberjack, colIndex, 2);
-    }
-
-    private void flipLumberjack(int site) {
-        if (site != currentSite) {
-            int flipAnkle = 180;
-            double imageWidth = lumberjack.getImage().getWidth();
-            currentSite = site;
-            Translate flipTranslation = new Translate(-imageWidth, 0);
-            Rotate flipRotation = new Rotate(flipAnkle, Rotate.Y_AXIS);
-            lumberjack.getTransforms().addAll(flipRotation, flipTranslation);
-        }
-    }
-
-    public void removeLumberjack() {
-        for (Node node : getChildren()) {
-            if (node instanceof ImageView) {
-                getChildren().remove(node);
-                break;
-            }
-        }
-    }
-
-    //BRANCH HAS 50% TO BE ADDED AND THEN 50% TO SPAWN ON EITHER SIDE
-    public void addBranch() {
-        //DO NOT ADD BRANCH
-        if (Math.floor(Math.random() * 2) % 2 == 1) {
+    public void placeLumberjack(int side) {
+        if (side == currentPlayerSide)
             return;
-        }
-        Branch branch = new Branch(stage);
-        int branchColumn = Math.floor(Math.random() * 2) % 2 == 1 ? 0 : 2;
-        setValignment(branch, VPos.CENTER);
-        setHalignment(branch, branchColumn == 0 ? HPos.RIGHT : HPos.LEFT);
-        add(branch, branchColumn, 0);
+        currentPlayerSide = side;
+        setPlayerSide(side);
     }
 
-    //TODO: make some animation when lumberjack hits branch
-    public void checkForCollision() {
-        Branch branch = null;
-        for (Node node : getChildren()) {
-            if (node instanceof Branch && getRowIndex(node) == 2) {
-                branch = (Branch) node;
+    private void setPlayerSide(int side) {
+        Pane player = (Pane) this.lookup(".playerPane");
+        player.getStyleClass().remove(CSS_LEFT_CLASS);
+        player.getStyleClass().remove(CSS_RIGHT_CLASS);
+        player.getStyleClass().remove(CSS_CLASS_PLAYER_RIGHT);
+        player.getStyleClass().remove(CSS_CLASS_PLAYER_LEFT);
+
+        switch (side) {
+            case LEFT_SIDE -> {
+                player.getStyleClass().add(CSS_LEFT_CLASS);
+                player.getStyleClass().add(CSS_CLASS_PLAYER_LEFT);
             }
-        }
-        //COLLISION
-        if (branch != null && Objects.equals(getColumnIndex(branch), getColumnIndex(lumberjack))) {
-            //lumberjack.setFill(Color.RED);
-            getChildren().remove(branch);
-            addNegativePointAnimation();
-            updatePoints(PENALTY_POINTS);
-            chopDownTreeAnimation();
-            ouchSound.seek(choppingSound.getStartTime());
-            ouchSound.play();
-        }
-        //NO COLLISION
-        else {
-            updatePoints(1);
-            chopDownTreeAnimation();
-            choppingSound.seek(choppingSound.getStartTime());
-            choppingSound.play();
+            case RIGHT_SIDE -> {
+                player.getStyleClass().add(CSS_RIGHT_CLASS);
+                player.getStyleClass().add(CSS_CLASS_PLAYER_RIGHT);
+            }
         }
     }
 
     //TODO: Method uses long algorithm, maybe can be changed to be faster
     public void lowerBranches() {
-        Branch[] branches = new Branch[6];
-        int[] columns = new int[6];
-        int[] rows = new int[6];
-        int i = 0;
-        //FIND ALL BRANCHES (CAN'T UPDATE CORDS RIGHT AWAY AS IT THROWS AN ERROR)
-        for (Node node : getChildren()) {
-            if (node instanceof Branch) {
-                branches[i] = (Branch) node;
-                columns[i] = getColumnIndex(node);
-                rows[i] = getRowIndex(node);
-                i++;
-            }
+        ArrayList<Pane> branches = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            branches.add((Pane) branchLayer.lookup("#branch_" + i));
         }
-        //REMOVE ALL BRANCHES
-        getChildren().removeAll(branches);
-        //ADD NEW BRANCHES WITH UPDATED CORDS
-        for (int j = 0; j < i; j++) {
-            if (rows[j] < 2) {
-                Branch branch = new Branch(stage);
-                setValignment(branch, VPos.CENTER);
-                setHalignment(branch, columns[j] == 0 ? HPos.RIGHT : HPos.LEFT);
-                add(branch, columns[j], rows[j] + 1);
-            }
+
+        for (int i = 0; i < branches.size() - 1; i++) {
+            Pane currentBranch = branches.get(i);
+            currentBranch.getStyleClass().clear();
+
+            Pane higherBranch = branches.get(i + 1);
+            List<String> styleClass = higherBranch.getStyleClass();
+            currentBranch.getStyleClass().addAll(styleClass);
+        }
+        clearBranch(5);
+    }
+
+    void clearBranch(int id) {
+        Pane branch = (Pane) branchLayer.lookup("#branch_" + id);
+        try {
+            branch.getStyleClass().remove(CSS_CLASS_BRANCH_LEFT);
+            branch.getStyleClass().remove(CSS_CLASS_BRANCH_RIGHT);
+        } finally {
+            branch.getStyleClass().add(CSS_CLASS_BRANCH_EMPTY);
         }
     }
 
-    public void updatePoints(int toAdd) {
-        points += toAdd;
-        if (points < 0)
-            points = 0;
-        pointsLabel.setText(Integer.toString(points));
+    //TODO: make some animation when lumberjack hits branch
+    public void checkForCollision() {
+        Pane bottomBranch = (Pane) branchLayer.lookup("#branch_0");
+        Pane player = (Pane) playerLayer.lookup(".playerPane");
+
+        String bottomBranchSide = getSideCssClass(bottomBranch);
+        String playerSide = getSideCssClass(player);
+
+        if (bottomBranchSide.equals(playerSide)) {
+            //COLLISION
+            addNegativePointAnimation();
+            updatePoints(PENALTY_POINTS);
+            chopDownTreeAnimation();
+            ouchSound.seek(ouchSound.getStartTime());
+            ouchSound.play();
+        } else {
+            //NO COLLISION
+            updatePoints(1);
+            chopDownTreeAnimation();
+            choppingSound.seek(choppingSound.getStartTime());
+            choppingSound.play();
+        }
+        clearBranch(0);
     }
 
-    public void addNegativePointAnimation() {
+    private void addNegativePointAnimation(){
         Text text = new Text(Integer.toString(PENALTY_POINTS));
-        setValignment(text, VPos.TOP);
-        setHalignment(text, HPos.CENTER);
-        text.setFont(new Font("Consolas", (int) (75 / GameWindow.numberOfPlayers)));
+        trunkLayer.setValignment(text, VPos.TOP);
+        trunkLayer.setHalignment(text, HPos.CENTER);
+        switch (GameWindow.numberOfPlayers){
+            case 1 -> {
+                text.setFont(new Font("Consolas", 60));
+            }
+            case 2 -> {
+                text.setFont(new Font("Consolas", 50));
+            }
+            case 3 -> {
+                text.setFont(new Font("Consolas", 45));
+            }
+        }
         text.setFill(Color.valueOf("#FF4E4E"));
         text.setStroke(Color.BLACK);
         text.setStrokeWidth(1.5);
         setMargin(text, new Insets(15, 0, 0, 0));
         text.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 10, 0.5, 0.0, 0.0);");
-        add(text, 1, 1);
+        trunkLayer.add(text, 0, 1);
 
         //Animation
         FadeTransition fadeTransition = new FadeTransition();
@@ -258,27 +200,56 @@ public class PlayerPane extends GridPane {
         fadeTransition.setDuration(Duration.millis(1500));
         fadeTransition.setFromValue(1);
         fadeTransition.setToValue(0);
-        fadeTransition.setOnFinished(e -> getChildren().remove(text));
+        fadeTransition.setOnFinished(e -> trunkLayer.getChildren().remove(text));
         fadeTransition.play();
     }
 
-    public int getPoints() {
-        return points;
+    private String getSideCssClass(Pane pane) {
+        ObservableList<String> CssClasses = pane.getStyleClass();
+        if (CssClasses.contains(CSS_LEFT_CLASS) || CssClasses.contains(CSS_CLASS_BRANCH_LEFT))
+            return CSS_LEFT_CLASS;
+        else if (CssClasses.contains(CSS_RIGHT_CLASS) || CssClasses.contains(CSS_CLASS_BRANCH_RIGHT))
+            return CSS_RIGHT_CLASS;
+        else return "empty";
     }
 
+    public void updatePoints(int toAdd) {
+        points += toAdd;
+        if (points < 0) points = 0;
+        pointsLabel.setText(Integer.toString(points));
+    }
+
+
+    //BRANCH HAS 50% TO BE ADDED AND THEN 50% TO SPAWN ON EITHER SIDE
+    public void addBranch() {
+        //DO NOT ADD BRANCH
+        if (rollChance(2)) {
+            return;
+        }
+
+        boolean isRightSide = rollChance(3);
+        String side = isRightSide ? CSS_RIGHT_CLASS : CSS_LEFT_CLASS;
+        Pane topBranch = (Pane) branchLayer.lookup("#branch_5");
+
+        topBranch.getStyleClass().removeAll(CSS_RIGHT_CLASS, CSS_LEFT_CLASS, CSS_CLASS_BRANCH_RIGHT, CSS_CLASS_BRANCH_LEFT, CSS_CLASS_BRANCH_EMPTY);
+        topBranch.getStyleClass().add(side.equals(CSS_RIGHT_CLASS) ? CSS_CLASS_BRANCH_RIGHT : CSS_CLASS_BRANCH_LEFT);
+    }
+
+    boolean rollChance(int chance) {
+        int check = new Random().nextInt(chance);
+        return check != 1;
+    }
+
+
     public void chopDownTreeAnimation() {
-        double treeWidth = width / 3 - 0.5;
-        double treeHeight = height / 3;
-        Rectangle tree = new Rectangle(treeWidth, treeHeight);
-        Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
-        tree.setFill(new ImagePattern(img));
-        tree.setStrokeWidth(2.5);
-        setHalignment(tree, HPos.CENTER);
-        add(tree, 1, 2);
+        Pane tree = new Pane();
+        tree.getStyleClass().add("floorAnim");
+        GridPane.setHalignment(tree, HPos.CENTER);
+        trunkLayer.add(tree, 0, 5);
 
         //All animations
         ParallelTransition pt = new ParallelTransition();
-        pt.setOnFinished(e -> getChildren().remove(tree));
+        pt.setOnFinished(e -> trunkLayer.getChildren().remove(tree));
 
         //Animation rotate
         RotateTransition rotate = new RotateTransition(Duration.millis(250));
@@ -289,9 +260,8 @@ public class PlayerPane extends GridPane {
         //Animation translate
         TranslateTransition translate = new TranslateTransition(Duration.millis(250));
         translate.setNode(tree);
-        int colIndex = getColumnIndex(lumberjack);
-        translate.setByX(colIndex == 0 ? treeWidth : -treeWidth);
-        translate.setByY(treeHeight);
+        translate.setByX(currentPlayerSide == LEFT_SIDE ? 150 : -150);
+        translate.setByY(150);
         pt.getChildren().add(translate);
 
         //Animation scale
@@ -307,13 +277,18 @@ public class PlayerPane extends GridPane {
         pt.play();
     }
 
-    public void initChoppingSound(){
-        choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/chop_chop.mp3").toExternalForm()));
-        choppingSound.setVolume(0.6);
+
+    public void changeTime(int time) {
+        int minutes = time / 60;
+        int seconds = (time - (time / 60) * 60);
+        String output = String.format("%d:%02d", minutes, seconds);
+        timeLabel.setText(output);
     }
 
-    public void initOuchSound(){
-        ouchSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/ouch.mp3").toExternalForm()));
-        ouchSound.setVolume(0.6);
+
+    public int getPoints() {
+        return points;
     }
+
+
 }

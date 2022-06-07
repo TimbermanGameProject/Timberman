@@ -3,7 +3,6 @@ package result.window;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import options.window.OptionsWindow;
 
 import java.io.IOException;
 import java.util.Objects;
