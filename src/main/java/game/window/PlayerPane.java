@@ -72,6 +72,8 @@ public class PlayerPane extends StackPane {
 
         CSS_CLASS_PLAYER_RIGHT += id;
         CSS_CLASS_PLAYER_LEFT += id;
+
+        setPlayerSide(LEFT_SIDE);
     }
 
     public void initChoppingSound() {
