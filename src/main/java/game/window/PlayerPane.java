@@ -178,13 +178,13 @@ public class PlayerPane extends StackPane {
         trunkLayer.setHalignment(text, HPos.CENTER);
         switch (GameWindow.numberOfPlayers){
             case 1 -> {
-                text.setFont(new Font("Consolas", 50));
+                text.setFont(new Font("Consolas", 60));
             }
             case 2 -> {
-                text.setFont(new Font("Consolas", 40));
+                text.setFont(new Font("Consolas", 50));
             }
             case 3 -> {
-                text.setFont(new Font("Consolas", 35));
+                text.setFont(new Font("Consolas", 45));
             }
         }
         text.setFill(Color.valueOf("#FF4E4E"));
