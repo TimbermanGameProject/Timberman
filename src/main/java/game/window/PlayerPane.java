@@ -32,8 +32,8 @@ public class PlayerPane extends StackPane {
     public static final String CSS_CLASS_BRANCH_RIGHT = "branchRight";
     public static final String CSS_CLASS_BRANCH_LEFT = "branchLeft";
     public static final String CSS_CLASS_BRANCH_EMPTY = "branchEmpty";
-    public static final String CSS_CLASS_PLAYER_LEFT = "playerLeft";
-    public static final String CSS_CLASS_PLAYER_RIGHT = "playerRight";
+    public  String CSS_CLASS_PLAYER_LEFT = "playerLeft";
+    public  String CSS_CLASS_PLAYER_RIGHT = "playerRight";
     private int currentPlayerSide = 0;
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
@@ -69,6 +69,9 @@ public class PlayerPane extends StackPane {
         playerLayer = (GridPane) this.lookup("#playerLayer");
         pointsLabel = (Label) this.lookup("#pointsLabel");
         timeLabel = (Label) this.lookup("#timeLabel");
+
+        CSS_CLASS_PLAYER_RIGHT += id;
+        CSS_CLASS_PLAYER_LEFT += id;
     }
 
     public void initChoppingSound() {
