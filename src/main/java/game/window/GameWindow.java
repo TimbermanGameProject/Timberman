@@ -30,7 +30,7 @@ public class GameWindow extends Application {
     private Timeline timer;
 
 
-    Media media = new Media(this.getClass().getResource("/Music/timber1.mp3").toString());
+    Media media = new Media(this.getClass().getResource("/Music/LongCon.mp3").toString());
     MediaPlayer mediaPlayer = new MediaPlayer(media);
 
     public GameWindow(){
@@ -142,7 +142,7 @@ public class GameWindow extends Application {
 
         if(StartWindowController.checkboxValue){
             mediaPlayer.setAutoPlay(true);
-            mediaPlayer.setVolume(0.05);
+            mediaPlayer.setVolume(0.45);
             mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
             mediaPlayer.play();
         }

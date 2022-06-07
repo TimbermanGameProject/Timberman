@@ -28,6 +28,6 @@ Timberman is offline multiplayer game written in JavaFX.
   - StartWindow:
     - background - <a href='https://www.freepik.com/vectors/woodcutter'>Woodcutter vector created by macrovector - www.freepik.com</a>
 - Sounds -
-  - music - 
+  - music - https://soundcloud.com/dankbene (with author's permission)
   - throwSound  - https://Zapsplat.com
   - damageSound - https://mixkit.co/
