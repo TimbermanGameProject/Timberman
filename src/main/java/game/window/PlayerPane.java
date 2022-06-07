@@ -119,7 +119,6 @@ public class PlayerPane extends StackPane {
         }
     }
 
-    //TODO: Method uses long algorithm, maybe can be changed to be faster
     public void lowerBranches() {
         ArrayList<Pane> branches = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -147,7 +146,6 @@ public class PlayerPane extends StackPane {
         }
     }
 
-    //TODO: make some animation when lumberjack hits branch
     public void checkForCollision() {
         Pane bottomBranch = (Pane) branchLayer.lookup("#branch_0");
         Pane player = (Pane) playerLayer.lookup(".playerPane");

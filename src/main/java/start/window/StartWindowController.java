@@ -59,7 +59,6 @@ public class StartWindowController implements Initializable {
 
     @FXML
     protected void onReleaseShowOptionsContainer() {
-        System.out.println("show options button");
         optionsContainer.setVisible(true);
         optionsContainer.managedProperty().bind(optionsContainer.visibleProperty());
 
@@ -70,12 +69,6 @@ public class StartWindowController implements Initializable {
 
     @FXML
     protected void onReleaseHideOptionsContainer() {
-        //todo should update static values
-        System.out.println("hide options button");
-        System.out.println("Checkbox status:    " + music.isSelected());
-        System.out.println("time status:    " + roundTime.getText());
-        System.out.println("players status:    " + players.getText());
-
         int playerValueTemp;
         int timeValueTemp;
         try {
@@ -111,9 +104,6 @@ public class StartWindowController implements Initializable {
 
     @FXML
     protected void onActionToggleMusic() {
-        //todo should close game window
-        System.out.println("turn off music");
-
         checkboxValue = !checkboxValue;
     }
 

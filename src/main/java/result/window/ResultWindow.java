@@ -12,7 +12,7 @@ public class ResultWindow extends Application {
     private final String pathToFXML;
 
     public ResultWindow(final int number){
-        this.pathToFXML = "/ResultWindow/ResultWindow1.fxml";
+        this.pathToFXML = "/ResultWindow/ResultWindow.fxml";
     }
 
     @Override
