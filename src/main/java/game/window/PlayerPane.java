@@ -25,27 +25,22 @@ import java.util.Random;
 
 
 public class PlayerPane extends StackPane {
-    public static final int[] charactersID = {0, 1, 2};
     private static final int PENALTY_POINTS = -25;
     public static final String CSS_RIGHT_CLASS = "right";
-    public static final String CSS_LEFT_CLASS = "left";
-    public static final String CSS_CLASS_BRANCH_RIGHT = "branchRight";
-    public static final String CSS_CLASS_BRANCH_LEFT = "branchLeft";
-    public static final String CSS_CLASS_BRANCH_EMPTY = "branchEmpty";
+    private static final String CSS_LEFT_CLASS = "left";
+    private static final String CSS_CLASS_BRANCH_RIGHT = "branchRight";
+    private static final String CSS_CLASS_BRANCH_LEFT = "branchLeft";
+    private static final String CSS_CLASS_BRANCH_EMPTY = "branchEmpty";
     public  String CSS_CLASS_PLAYER_LEFT = "playerLeft";
     public  String CSS_CLASS_PLAYER_RIGHT = "playerRight";
     private int currentPlayerSide = 0;
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
-    public static final int EMPTY_SIDE = 2;
     private int points;
     private Label timeLabel;
     private Label pointsLabel;
     private MediaPlayer choppingSound;
     private MediaPlayer ouchSound;
-
-    private ImageView lumberjack;
-
     private GridPane trunkLayer;
     private GridPane branchLayer;
     private GridPane playerLayer;
