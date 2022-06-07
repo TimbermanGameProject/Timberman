@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -60,6 +62,7 @@ public class Main extends Application {
         stage.setMaximized(true);
 
         stage.setScene(scene);
+
         stage.show();
     }
 
