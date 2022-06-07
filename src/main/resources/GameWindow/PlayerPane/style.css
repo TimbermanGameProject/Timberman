@@ -4,6 +4,13 @@
     -fx-background-position: center center;
 }
 
+.floorAnim{
+    -fx-background-repeat: stretch;
+    -fx-background-size: auto 100%;
+    -fx-background-position: center center;
+        -fx-background-image: url("img/tree/1.png");
+}
+
 #floor_0 {
     -fx-background-image: url("img/tree/0.png");
 }
@@ -33,12 +40,26 @@
     -fx-background-size: 95% auto;
     -fx-background-position: left bottom;
 }
-.playerLeft{
+
+.playerLeft0{
+    -fx-background-image: url("img/characters/character_0_left.png");
+}
+.playerRight0{
+    -fx-background-image: url("img/characters/character_0_right.png");
+}
+.playerLeft1{
     -fx-background-image: url("img/characters/character_1_left.png");
 }
-.playerRight{
+.playerRight1{
     -fx-background-image: url("img/characters/character_1_right.png");
 }
+.playerLeft2{
+    -fx-background-image: url("img/characters/character_2_left.png");
+}
+.playerRight2{
+    -fx-background-image: url("img/characters/character_2_right.png");
+}
+
 
 
 .branch {

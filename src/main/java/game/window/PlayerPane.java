@@ -1,13 +1,21 @@
 package game.window;
 
 
+import javafx.animation.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 
 import java.io.IOException;
@@ -24,8 +32,8 @@ public class PlayerPane extends StackPane {
     public static final String CSS_CLASS_BRANCH_RIGHT = "branchRight";
     public static final String CSS_CLASS_BRANCH_LEFT = "branchLeft";
     public static final String CSS_CLASS_BRANCH_EMPTY = "branchEmpty";
-    public static final String CSS_CLASS_PLAYER_LEFT = "playerLeft";
-    public static final String CSS_CLASS_PLAYER_RIGHT = "playerRight";
+    public  String CSS_CLASS_PLAYER_LEFT = "playerLeft";
+    public  String CSS_CLASS_PLAYER_RIGHT = "playerRight";
     private int currentPlayerSide = 0;
     public static final int LEFT_SIDE = 0;
     public static final int RIGHT_SIDE = 1;
@@ -57,9 +65,15 @@ public class PlayerPane extends StackPane {
         //OUCH SOUND INIT
         initOuchSound();
         branchLayer = (GridPane) this.lookup("#branchLayer");
+        trunkLayer = (GridPane) this.lookup("#trunkLayer");
         playerLayer = (GridPane) this.lookup("#playerLayer");
         pointsLabel = (Label) this.lookup("#pointsLabel");
         timeLabel = (Label) this.lookup("#timeLabel");
+
+        CSS_CLASS_PLAYER_RIGHT += id;
+        CSS_CLASS_PLAYER_LEFT += id;
+
+        setPlayerSide(LEFT_SIDE);
     }
 
     public void initChoppingSound() {
@@ -143,7 +157,7 @@ public class PlayerPane extends StackPane {
 
         if (bottomBranchSide.equals(playerSide)) {
             //COLLISION
-            //addNegativePointAnimation();
+            addNegativePointAnimation();
             updatePoints(PENALTY_POINTS);
             chopDownTreeAnimation();
             ouchSound.seek(ouchSound.getStartTime());
@@ -156,6 +170,38 @@ public class PlayerPane extends StackPane {
             choppingSound.play();
         }
         clearBranch(0);
+    }
+
+    private void addNegativePointAnimation(){
+        Text text = new Text(Integer.toString(PENALTY_POINTS));
+        trunkLayer.setValignment(text, VPos.TOP);
+        trunkLayer.setHalignment(text, HPos.CENTER);
+        switch (GameWindow.numberOfPlayers){
+            case 1 -> {
+                text.setFont(new Font("Consolas", 50));
+            }
+            case 2 -> {
+                text.setFont(new Font("Consolas", 40));
+            }
+            case 3 -> {
+                text.setFont(new Font("Consolas", 35));
+            }
+        }
+        text.setFill(Color.valueOf("#FF4E4E"));
+        text.setStroke(Color.BLACK);
+        text.setStrokeWidth(1.5);
+        setMargin(text, new Insets(15, 0, 0, 0));
+        text.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 10, 0.5, 0.0, 0.0);");
+        trunkLayer.add(text, 0, 1);
+
+        //Animation
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setNode(text);
+        fadeTransition.setDuration(Duration.millis(1500));
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.setOnFinished(e -> trunkLayer.getChildren().remove(text));
+        fadeTransition.play();
     }
 
     private String getSideCssClass(Pane pane) {
@@ -196,44 +242,39 @@ public class PlayerPane extends StackPane {
 
 
     public void chopDownTreeAnimation() {
-//        double treeWidth = width / 3 - 0.5;
-//        double treeHeight = height / 3;
-//        Rectangle tree = new Rectangle(treeWidth, treeHeight);
-//        Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
-//        tree.setFill(new ImagePattern(img));
-//        tree.setStrokeWidth(2.5);
-//        setHalignment(tree, HPos.CENTER);
-//        add(tree, 1, 2);
-//
-//        //All animations
-//        ParallelTransition pt = new ParallelTransition();
-//        pt.setOnFinished(e -> getChildren().remove(tree));
-//
-//        //Animation rotate
-//        RotateTransition rotate = new RotateTransition(Duration.millis(250));
-//        rotate.setNode(tree);
-//        rotate.setByAngle(360);
-//        pt.getChildren().add(rotate);
-//
-//        //Animation translate
-//        TranslateTransition translate = new TranslateTransition(Duration.millis(250));
-//        translate.setNode(tree);
-//        int colIndex = getColumnIndex(lumberjack);
-//        translate.setByX(colIndex == 0 ? treeWidth : -treeWidth);
-//        translate.setByY(treeHeight);
-//        pt.getChildren().add(translate);
-//
-//        //Animation scale
-//        ScaleTransition scale = new ScaleTransition(Duration.millis(100));
-//        scale.setNode(tree);
-//        scale.setFromX(1);
-//        scale.setFromY(1);
-//        scale.setToX(0.7);
-//        scale.setToY(0.7);
-//        pt.getChildren().add(scale);
-//
-//        //Play all animations
-//        pt.play();
+        Pane tree = new Pane();
+        tree.getStyleClass().add("floorAnim");
+        GridPane.setHalignment(tree, HPos.CENTER);
+        trunkLayer.add(tree, 0, 5);
+
+        //All animations
+        ParallelTransition pt = new ParallelTransition();
+        pt.setOnFinished(e -> trunkLayer.getChildren().remove(tree));
+
+        //Animation rotate
+        RotateTransition rotate = new RotateTransition(Duration.millis(250));
+        rotate.setNode(tree);
+        rotate.setByAngle(360);
+        pt.getChildren().add(rotate);
+
+        //Animation translate
+        TranslateTransition translate = new TranslateTransition(Duration.millis(250));
+        translate.setNode(tree);
+        translate.setByX(currentPlayerSide == LEFT_SIDE ? 150 : -150);
+        translate.setByY(150);
+        pt.getChildren().add(translate);
+
+        //Animation scale
+        ScaleTransition scale = new ScaleTransition(Duration.millis(100));
+        scale.setNode(tree);
+        scale.setFromX(1);
+        scale.setFromY(1);
+        scale.setToX(0.7);
+        scale.setToY(0.7);
+        pt.getChildren().add(scale);
+
+        //Play all animations
+        pt.play();
     }
 
 
