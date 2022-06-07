@@ -77,7 +77,7 @@ public class PlayerPane extends StackPane {
     }
 
     public void initChoppingSound() {
-        choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/sounds/chop_chop3.mp3").toExternalForm()));
+        choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/sounds/chop_chop.mp3").toExternalForm()));
         choppingSound.setVolume(0.6);
     }
 
