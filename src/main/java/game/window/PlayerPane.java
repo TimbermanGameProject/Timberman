@@ -1,13 +1,21 @@
 package game.window;
 
 
+import javafx.animation.FadeTransition;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 
 import java.io.IOException;
@@ -57,6 +65,7 @@ public class PlayerPane extends StackPane {
         //OUCH SOUND INIT
         initOuchSound();
         branchLayer = (GridPane) this.lookup("#branchLayer");
+        trunkLayer = (GridPane) this.lookup("#trunkLayer");
         playerLayer = (GridPane) this.lookup("#playerLayer");
         pointsLabel = (Label) this.lookup("#pointsLabel");
         timeLabel = (Label) this.lookup("#timeLabel");
@@ -143,7 +152,7 @@ public class PlayerPane extends StackPane {
 
         if (bottomBranchSide.equals(playerSide)) {
             //COLLISION
-            //addNegativePointAnimation();
+            addNegativePointAnimation();
             updatePoints(PENALTY_POINTS);
             chopDownTreeAnimation();
             ouchSound.seek(ouchSound.getStartTime());
@@ -156,6 +165,38 @@ public class PlayerPane extends StackPane {
             choppingSound.play();
         }
         clearBranch(0);
+    }
+
+    private void addNegativePointAnimation(){
+        Text text = new Text(Integer.toString(PENALTY_POINTS));
+        trunkLayer.setValignment(text, VPos.TOP);
+        trunkLayer.setHalignment(text, HPos.CENTER);
+        switch (GameWindow.numberOfPlayers){
+            case 1 -> {
+                text.setFont(new Font("Consolas", 50));
+            }
+            case 2 -> {
+                text.setFont(new Font("Consolas", 40));
+            }
+            case 3 -> {
+                text.setFont(new Font("Consolas", 35));
+            }
+        }
+        text.setFill(Color.valueOf("#FF4E4E"));
+        text.setStroke(Color.BLACK);
+        text.setStrokeWidth(1.5);
+        setMargin(text, new Insets(15, 0, 0, 0));
+        text.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(one-pass-box, black, 10, 0.5, 0.0, 0.0);");
+        trunkLayer.add(text, 0, 1);
+
+        //Animation
+        FadeTransition fadeTransition = new FadeTransition();
+        fadeTransition.setNode(text);
+        fadeTransition.setDuration(Duration.millis(1500));
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.setOnFinished(e -> trunkLayer.getChildren().remove(text));
+        fadeTransition.play();
     }
 
     private String getSideCssClass(Pane pane) {
