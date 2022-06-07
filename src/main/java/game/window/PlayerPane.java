@@ -1,7 +1,7 @@
 package game.window;
 
 
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -237,44 +237,39 @@ public class PlayerPane extends StackPane {
 
 
     public void chopDownTreeAnimation() {
-//        double treeWidth = width / 3 - 0.5;
-//        double treeHeight = height / 3;
-//        Rectangle tree = new Rectangle(treeWidth, treeHeight);
-//        Image img = new Image(Objects.requireNonNull(getClass().getResource("/GameWindow/treeTexture.jpg")).toExternalForm());
-//        tree.setFill(new ImagePattern(img));
-//        tree.setStrokeWidth(2.5);
-//        setHalignment(tree, HPos.CENTER);
-//        add(tree, 1, 2);
-//
-//        //All animations
-//        ParallelTransition pt = new ParallelTransition();
-//        pt.setOnFinished(e -> getChildren().remove(tree));
-//
-//        //Animation rotate
-//        RotateTransition rotate = new RotateTransition(Duration.millis(250));
-//        rotate.setNode(tree);
-//        rotate.setByAngle(360);
-//        pt.getChildren().add(rotate);
-//
-//        //Animation translate
-//        TranslateTransition translate = new TranslateTransition(Duration.millis(250));
-//        translate.setNode(tree);
-//        int colIndex = getColumnIndex(lumberjack);
-//        translate.setByX(colIndex == 0 ? treeWidth : -treeWidth);
-//        translate.setByY(treeHeight);
-//        pt.getChildren().add(translate);
-//
-//        //Animation scale
-//        ScaleTransition scale = new ScaleTransition(Duration.millis(100));
-//        scale.setNode(tree);
-//        scale.setFromX(1);
-//        scale.setFromY(1);
-//        scale.setToX(0.7);
-//        scale.setToY(0.7);
-//        pt.getChildren().add(scale);
-//
-//        //Play all animations
-//        pt.play();
+        Pane tree = new Pane();
+        tree.getStyleClass().add("floorAnim");
+        GridPane.setHalignment(tree, HPos.CENTER);
+        trunkLayer.add(tree, 0, 5);
+
+        //All animations
+        ParallelTransition pt = new ParallelTransition();
+        pt.setOnFinished(e -> trunkLayer.getChildren().remove(tree));
+
+        //Animation rotate
+        RotateTransition rotate = new RotateTransition(Duration.millis(250));
+        rotate.setNode(tree);
+        rotate.setByAngle(360);
+        pt.getChildren().add(rotate);
+
+        //Animation translate
+        TranslateTransition translate = new TranslateTransition(Duration.millis(250));
+        translate.setNode(tree);
+        translate.setByX(currentPlayerSide == LEFT_SIDE ? 150 : -150);
+        translate.setByY(150);
+        pt.getChildren().add(translate);
+
+        //Animation scale
+        ScaleTransition scale = new ScaleTransition(Duration.millis(100));
+        scale.setNode(tree);
+        scale.setFromX(1);
+        scale.setFromY(1);
+        scale.setToX(0.7);
+        scale.setToY(0.7);
+        pt.getChildren().add(scale);
+
+        //Play all animations
+        pt.play();
     }
 
 

@@ -4,6 +4,13 @@
     -fx-background-position: center center;
 }
 
+.floorAnim{
+    -fx-background-repeat: stretch;
+    -fx-background-size: auto 100%;
+    -fx-background-position: center center;
+        -fx-background-image: url("img/tree/1.png");
+}
+
 #floor_0 {
     -fx-background-image: url("img/tree/0.png");
 }
