@@ -1,10 +1,19 @@
-# timberman
-Projekt KCK
+# Timberman multiplayer
+Project for KCK classes
 
-WoodSign <a href='https://pl.freepik.com/wektory/drewno'>Drewno plik wektorowy utworzone przez pch.vector - pl.freepik.com</a>
+<img src="images/mainWindow.jpg" width="90%"/>
+<img src="images/gameWindow.jpg" width="90%"/>
 
-- GameWindow Image -
-- StartWindow Image - 
-- Music -
-- throw sound  - https://Zapsplat.com
-- Damage sound - https://mixkit.co/
+# Credits
+- Graphic 
+  - GameWindow:
+    - background - <a href="https://www.freepik.com/vectors/woodcutter">Woodcutter vector created by macrovector - www.freepik.com</a>
+    - playerCharacter - <a href='https://www.freepik.com/vectors/woodcutter'>Woodcutter vector created by macrovector - www.freepik.com</a>
+    - tree - <a href='https://www.freepik.com/vectors/log'>Log vector created by pch.vector - www.freepik.com</a>
+    - woodSign <a href='https://pl.freepik.com/wektory/drewno'>Drewno plik wektorowy utworzone przez pch.vector - pl.freepik.com</a>
+  - StartWindow:
+    - background - <a href='https://www.freepik.com/vectors/woodcutter'>Woodcutter vector created by macrovector - www.freepik.com</a>
+- Sounds -
+  - music - 
+  - throwSound  - https://Zapsplat.com
+  - damageSound - https://mixkit.co/
