@@ -15,14 +15,13 @@
     -fx-background-size: 100% auto;
     -fx-background-position: center center;
 
-    -fx-font-size: 40px;
+    -fx-font-size: 35px;
     -fx-text-alignment: center;
     -fx-font-family: "Snap ITC";
     -fx-text-fill: #c48200;
 
 }
 .menuButton:hover{
-    /*-fx-background-color: rgba(20, 20, 20);*/
     -fx-scale-x: 1.1;
     -fx-scale-y: 1.1;
     -fx-scale-z: 1.1;

@@ -5,10 +5,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -52,6 +51,8 @@ public class Main extends Application {
         String css = Objects.requireNonNull(this.getClass().getResource("/StartWindow/style.css")).toExternalForm();
         stage.setFullScreen(true);
         stage.setMaximized(true);
+
+        stage.getIcons().add(new Image(StartWindow.class.getResourceAsStream("/icon.png")));
 
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(css);
