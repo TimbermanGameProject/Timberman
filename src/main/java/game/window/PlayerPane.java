@@ -77,12 +77,12 @@ public class PlayerPane extends StackPane {
     }
 
     public void initChoppingSound() {
-        choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/chop_chop.mp3").toExternalForm()));
+        choppingSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/sounds/chop_chop.mp3").toExternalForm()));
         choppingSound.setVolume(0.6);
     }
 
     public void initOuchSound() {
-        ouchSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/ouch.mp3").toExternalForm()));
+        ouchSound = new MediaPlayer(new Media(GameWindow.class.getResource("/GameWindow/sounds/ouch2.mp3").toExternalForm()));
         ouchSound.setVolume(0.6);
     }
 
@@ -168,6 +168,9 @@ public class PlayerPane extends StackPane {
             chopDownTreeAnimation();
             choppingSound.seek(choppingSound.getStartTime());
             choppingSound.play();
+
+
+
         }
         clearBranch(0);
     }
