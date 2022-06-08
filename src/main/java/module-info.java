@@ -2,6 +2,7 @@ module timberman {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
+    requires javafx.media;
 
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
@@ -10,7 +11,7 @@ module timberman {
     opens start.window to javafx.fxml;
     exports start.window;
 
-    opens options.window to javafx.fxml;
-    exports options.window;
+    opens result.window to javafx.fxml;
+    exports result.window;
 
 }

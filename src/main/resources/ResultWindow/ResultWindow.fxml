@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane prefHeight="720.0" prefWidth="1181.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="result.window.ResultWindowControllerOne">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="800.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="250.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="36.000006103515624" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="312.7999633789062" valignment="TOP" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="titleLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="257.0" text="RESULTS" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="48.0" />
+               </font>
+            </Label>
+            <HBox id="resultsContainer" fx:id="resultsContainer" alignment="BOTTOM_CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <children>
+                  <Button fx:id="restartButton" mnemonicParsing="false" onAction="#restartGame" prefHeight="150.0" prefWidth="300.0" styleClass="menuButton" stylesheets="@../StartWindow/style.css" text="RESTART" />
+                  <Button fx:id="menuButton" mnemonicParsing="false" onAction="#returnToMenu" prefHeight="150.0" prefWidth="300.0" styleClass="menuButton" stylesheets="@../StartWindow/style.css" text="MENU" />
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+   </children>
+</GridPane>

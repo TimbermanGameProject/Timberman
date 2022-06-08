@@ -1,0 +1,46 @@
+.root {
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% auto;
+    -fx-background-position: center center;
+    -fx-background-image: url("resultWindowBg.jpg");
+    -fx-font-size: 48px;
+    -fx-font-family: "Consolas";
+}
+
+.button {
+    -fx-cursor: hand;
+}
+
+#titleLabel {
+    -fx-font-size: 60px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0), 12, 0.9, 0.0, 0.0);
+    -fx-font-weight: bold;
+}
+
+.player1Points {
+    -fx-background-color: #51167f;
+}
+
+.player2Points {
+    -fx-background-color: #8d1c1c;
+}
+
+.player3Points {
+    -fx-background-color: #1c3f8c;
+}
+
+#pointsLabel {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-text-fill: white;
+}
+
+.fristPalce{
+    -fx-pref-height: 500px;
+}
+.secondPlace{
+    -fx-pref-height: 300px;
+}
+.thirdsPlace{
+    -fx-pref-height: 100px;
+}

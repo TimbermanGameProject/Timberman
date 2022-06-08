@@ -3,3 +3,5 @@
 target
 *.iml
 *.iws
+src/main/resources/GameWindow/background — kopia.jpg
+src/main/resources/GameWindow/PlayerPane/img/background.jpg

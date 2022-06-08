@@ -1,0 +1,98 @@
+.floor {
+    -fx-background-repeat: stretch;
+    -fx-background-size: auto 100%;
+    -fx-background-position: center center;
+}
+
+.floorAnim{
+    -fx-background-repeat: stretch;
+    -fx-background-size: auto 100%;
+    -fx-background-position: center center;
+        -fx-background-image: url("img/tree/1.png");
+}
+
+#floor_0 {
+    -fx-background-image: url("img/tree/0.png");
+}
+
+#floor_1 {
+    -fx-background-image: url("img/tree/1.png");
+}
+
+#floor_2 {
+    -fx-background-image: url("img/tree/2.png");
+}
+
+#floor_3 {
+    -fx-background-image: url("img/tree/3.png");
+}
+
+#floor_4 {
+    -fx-background-image: url("img/tree/4.png");
+}
+
+#floor_5 {
+    -fx-background-image: url("img/tree/3.png");
+}
+
+.playerPane {
+    -fx-background-repeat: stretch;
+    -fx-background-size: 95% auto;
+    -fx-background-position: left bottom;
+}
+
+.playerLeft0{
+    -fx-background-image: url("img/characters/character_0_left.png");
+}
+.playerRight0{
+    -fx-background-image: url("img/characters/character_0_right.png");
+}
+.playerLeft1{
+    -fx-background-image: url("img/characters/character_1_left.png");
+}
+.playerRight1{
+    -fx-background-image: url("img/characters/character_1_right.png");
+}
+.playerLeft2{
+    -fx-background-image: url("img/characters/character_2_left.png");
+}
+.playerRight2{
+    -fx-background-image: url("img/characters/character_2_right.png");
+}
+
+
+
+.branch {
+    -fx-background-repeat: stretch;
+    -fx-background-size: 80% 100%;
+    -fx-max-width: 800px;
+    -fx-background-position: center center;
+}
+
+.branchEmpty {
+    /* make it transparent after debugging */
+    -fx-background-color: rgba(12, 12, 14, 0);
+}
+
+.branchLeft {
+    -fx-background-image: url("img/tree/left_0.png");
+}
+
+.branchRight {
+    -fx-background-image: url("img/tree/right_0.png");
+}
+
+#sign {
+    -fx-background-repeat: stretch;
+    -fx-background-size: 100% auto;
+    -fx-max-width: 250px;
+    -fx-background-position: center top;
+    -fx-background-image: url("img/sign.png");
+}
+
+.left {
+    -fx-background-color: rgba(12,12,250,0);
+}
+.right {
+    -fx-background-color: rgba(250,0,0,0);
+}
