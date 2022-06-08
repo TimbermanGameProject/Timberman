@@ -142,7 +142,7 @@ public class GameWindow extends Application {
 
         if(StartWindowController.checkboxValue){
             mediaPlayer.setAutoPlay(true);
-            mediaPlayer.setVolume(0.45);
+            mediaPlayer.setVolume(0.50);
             mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
             mediaPlayer.play();
         }
